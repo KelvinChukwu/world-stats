@@ -10,6 +10,7 @@ python = "^3.12"
 flask = "^3.0.3"
 flask-smorest = "^0.44.0"
 flask-mysqldb = "^2.0.0"
+poetry-dotenv-plugin = "^0.2.0"
 
 
 [build-system]
