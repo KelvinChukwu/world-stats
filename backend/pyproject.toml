@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "world-stats-backend"
+version = "0.1.0"
+description = ""
+authors = ["Kelvin Chukwu <chukwu.kelvin@yahoo.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+flask-smorest = "^0.44.0"
+flask-mysqldb = "^2.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
