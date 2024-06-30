@@ -1,12 +1,31 @@
 from flask import Flask, jsonify
 from flask_mysqldb import MySQL
+from dotenv import dotenv_values
+from flask_smorest import Api
+from flask_sqlalchemy import SQLAlchemy
+
+
+secrets = dotenv_values(".env")
+
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'practice'
-app.config['MYSQL_DB'] = 'world'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+class APIConfig:
+    MYSQL_HOST = 'localhost'
+    MYSQL_USER = 'root'
+    MYSQL_PASSWORD = secrets["MYSQL_PASSWORD"]
+    MYSQL_DB = 'world'
+    MYSQL_CURSORCLASS = 'DictCursor'
+    API_TITLE = 'WORLD STATS API'
+    API_VERSION = 'v1'
+    OPENAPI_VERSION = '3.1.0'
+    OPENAPI_URL_PREFIX = "/"
+    OPENAPI_SWAGGER_UI_PATH = '/docs'
+    OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+    
+
+
+app.config.from_object(APIConfig)
 mysql = MySQL(app)
 
 # Routes
@@ -48,6 +67,8 @@ def get_city_data_by_id(id):
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
+
+api = Api(app)
 
 # Run
 if __name__ == '__main__':
