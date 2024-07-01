@@ -22,11 +22,15 @@ class APIConfig:
     OPENAPI_URL_PREFIX = "/"
     OPENAPI_SWAGGER_UI_PATH = '/docs'
     OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+    SQLALCHEMY_DATABASE_URI = "mysql://{db_user}:{db_passowrd}@{mysql_host}/{db_name}".format(MYSQL_USER,MYSQL_PASSWORD,MYSQL_HOST,MYSQL_DB)
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     
 
 
 app.config.from_object(APIConfig)
 mysql = MySQL(app)
+
+db = SQLAlchemy(app)
 
 # Routes
 @app.route('/')
