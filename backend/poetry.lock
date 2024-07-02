@@ -545,6 +545,21 @@ lint = ["pre-commit (==3.6.2)"]
 tests = ["PyYAML (==6.0.1)", "apispec (==6.4.0)", "coverage (==7.4.3)", "flask (==3.0.2)", "marshmallow (==3.20.2)", "pytest (==8.0.2)", "pytest-cov (==4.1.0)", "webargs (==8.4.0)", "werkzeug (==3.0.1)"]
 
 [[package]]
+name = "flask-sqlacodegen"
+version = "2.0.0"
+description = "Automatic model code generator for SQLAlchemy with Flask support"
+optional = false
+python-versions = "*"
+files = [
+    {file = "flask-sqlacodegen-2.0.0.tar.gz", hash = "sha256:b52847fac9d81696760da42327c1b0506113d4c95f6b46cf3e7d528cbff4d705"},
+    {file = "flask_sqlacodegen-2.0.0-py2.py3-none-any.whl", hash = "sha256:803bd6d1b6f8d6c4037f630cd608c0df9b0efcd6fb0eefe536018da9f34888fe"},
+]
+
+[package.dependencies]
+inflect = ">=4.0.0"
+SQLAlchemy = ">=2.0"
+
+[[package]]
 name = "flask-sqlalchemy"
 version = "3.1.1"
 description = "Add SQLAlchemy support to your Flask application."
@@ -640,6 +655,25 @@ files = [
     {file = "idna-3.7-py3-none-any.whl", hash = "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"},
     {file = "idna-3.7.tar.gz", hash = "sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc"},
 ]
+
+[[package]]
+name = "inflect"
+version = "7.3.1"
+description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "inflect-7.3.1-py3-none-any.whl", hash = "sha256:bedbae76877b054ecf0597153725677ab618fdd69abf189cc82e0f7a6720669d"},
+    {file = "inflect-7.3.1.tar.gz", hash = "sha256:edd785148a673b0c6dfef1a7d80cc1bcb2dd6d041cdb313b60032e464fd4e808"},
+]
+
+[package.dependencies]
+more-itertools = ">=8.5.0"
+typeguard = ">=4.0.1"
+
+[package.extras]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
+test = ["pygments", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [[package]]
 name = "installer"
@@ -1382,6 +1416,24 @@ files = [
 ]
 
 [[package]]
+name = "typeguard"
+version = "4.3.0"
+description = "Run-time type checker for Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "typeguard-4.3.0-py3-none-any.whl", hash = "sha256:4d24c5b39a117f8a895b9da7a9b3114f04eb63bade45a4492de49b175b6f7dfa"},
+    {file = "typeguard-4.3.0.tar.gz", hash = "sha256:92ee6a0aec9135181eae6067ebd617fd9de8d75d714fb548728a4933b1dea651"},
+]
+
+[package.dependencies]
+typing-extensions = ">=4.10.0"
+
+[package.extras]
+doc = ["Sphinx (>=7)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme (>=1.3.0)"]
+test = ["coverage[toml] (>=7)", "mypy (>=1.2.0)", "pytest (>=7)"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1544,4 +1596,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "2d883c561e17b724fa013127964ceffbd274613230cfc4b48a8248aad3d2ace6"
+content-hash = "94fccc1964b61b0938ca212b6375f27df80d96e3fed29fe5a08729fe1a6c372d"
