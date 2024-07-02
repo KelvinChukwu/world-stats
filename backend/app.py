@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from dotenv import dotenv_values
 from flask_smorest import Api
 from flask_sqlalchemy import SQLAlchemy
+from models import db
 
 
 secrets = dotenv_values(".env")
@@ -22,15 +23,14 @@ class APIConfig:
     OPENAPI_URL_PREFIX = "/"
     OPENAPI_SWAGGER_UI_PATH = '/docs'
     OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
-    SQLALCHEMY_DATABASE_URI = "mysql://{db_user}:{db_passowrd}@{mysql_host}/{db_name}".format(MYSQL_USER,MYSQL_PASSWORD,MYSQL_HOST,MYSQL_DB)
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
     
 
 
 app.config.from_object(APIConfig)
 mysql = MySQL(app)
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 # Routes
 @app.route('/')
