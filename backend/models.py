@@ -2,7 +2,7 @@ import enum
 
 from sqlalchemy.orm import Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, Enum
 
 db = SQLAlchemy()
 
@@ -24,12 +24,12 @@ class Country(db.Model):
     code2: Mapped[str] = mapped_column(String(2))
     capital: Mapped[int]
     name: Mapped[str] = mapped_column(unique=True)
-    continent: Mapped[Continent]
+    continent: Mapped[Continent] = mapped_column(Enum('Asia','Europe', 'North America', 'Africa','Oceania','Antarctica','South America', name="continet_enum"))
     region: Mapped[str]
     surface_area: Mapped[float] = mapped_column(name="SurfaceArea")
     indep_year: Mapped[int] = mapped_column(name="IndepYear")
     population: Mapped[int]
-    life_expectancy: Mapped[float]
+    life_expectancy: Mapped[float] = mapped_column(name="LifeExpectancy")
     gnp: Mapped[float]
     local_name: Mapped[str] = mapped_column(name="LocalName")
     government_form: Mapped[str] = mapped_column(name="GovernmentForm")

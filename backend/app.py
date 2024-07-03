@@ -1,9 +1,10 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from flask_mysqldb import MySQL
 from dotenv import dotenv_values
-from flask_smorest import Api
-from flask_sqlalchemy import SQLAlchemy
-from models import db
+from flask_smorest import Api, Blueprint, abort
+from sqlalchemy import select
+from models import db, City, Country, CountryLanguage
+from schemas import ma, CountrySchema
 
 
 secrets = dotenv_values(".env")
@@ -26,12 +27,17 @@ class APIConfig:
     SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
     
 
-
 app.config.from_object(APIConfig)
 mysql = MySQL(app)
+api = Api(app)
 
 db.init_app(app)
+ma.init_app(app)
 
+countries = Blueprint("countries", "countries",url_prefix = "/countries", description = "Operations on countries")
+
+countries_schema = CountrySchema(many=True)
+     
 # Routes
 @app.route('/')
 def hello_world():
@@ -39,11 +45,9 @@ def hello_world():
 
 @app.route('/countries', methods=['GET'])
 def get_countries():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM country''')
-    data = cur.fetchall()
-    cur.close()
-    return jsonify(data)
+        all_countries = db.session.execute(db.select(Country).order_by(Country.name)).scalars().all()
+        return countries_schema.dump(all_countries)
+ 
 
 @app.route('/cities', methods=['GET'])
 def get_city_data():
@@ -71,8 +75,6 @@ def get_city_data_by_id(id):
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
-
-api = Api(app)
 
 # Run
 if __name__ == '__main__':
