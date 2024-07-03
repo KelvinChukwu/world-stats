@@ -24,7 +24,7 @@ class Country(db.Model):
     code: Mapped[str] = mapped_column(primary_key=True, type_= String(3))
     code2: Mapped[str] = mapped_column(String(2))
     capital_id: Mapped[int] = mapped_column(ForeignKey("city.id"),name="capital")
-    capital: Mapped["City"] = relationship(foreign_keys=[capital_id], primaryjoin="Country.capital_id == City.id", lazy="immediate")
+    capital: Mapped["City"] = relationship( primaryjoin="Country.capital_id == City.id")
     name: Mapped[str] = mapped_column(unique=True)
     continent: Mapped[Continent] = mapped_column(Enum('Asia','Europe', 'North America', 'Africa','Oceania','Antarctica','South America', name="continent_enum"))
     region: Mapped[str]
