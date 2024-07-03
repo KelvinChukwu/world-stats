@@ -55,6 +55,14 @@ class Countries(MethodView):
      def get (self):
           """List countries"""
           return db.session.execute(select(Country).order_by(Country.name)).scalars().all()
+     
+
+@countries_blp.route("/<country_code>")
+class CountriesByCode(MethodView):
+     @countries_blp.response(200,country_schema)
+     def get (self, country_code: str):
+          """Return Country based on code"""
+          return db.session.execute(select(Country).filter_by(code = country_code)).scalar()
 
 @cities_blp.route("/")
 class Cities(MethodView):
