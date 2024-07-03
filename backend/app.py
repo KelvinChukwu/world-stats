@@ -67,7 +67,6 @@ class CountriesByCode(MethodView):
           else:
                abort(404,message ="Country not found")
                
-
 @cities_blp.route("/")
 class Cities(MethodView):
      @cities_blp.response(200,cities_schema)
