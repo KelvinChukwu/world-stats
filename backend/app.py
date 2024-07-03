@@ -1,11 +1,11 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask
 from flask.views import MethodView
 from flask_mysqldb import MySQL
 from dotenv import dotenv_values
 from flask_smorest import Api, Blueprint, abort
 from sqlalchemy import select
-from models import db, City, Country, CountryLanguage
-from schemas import CitySchema, CountryLanguageSchema, ma, CountrySchema
+from models import db, City, Country
+from schemas import CitySchema, ma, CountrySchema
 
 
 secrets = dotenv_values(".env")
@@ -36,15 +36,13 @@ db.init_app(app)
 ma.init_app(app)
 
 countries_blp = Blueprint("countries", "countries",url_prefix = "/countries", description = "Operations on countries")
+cities_blp = Blueprint("cities", "cities",url_prefix = "/cities", description = "Operations on cities")
 
 countries_schema = CountrySchema(many=True)
 country_schema = CountrySchema()
 
 city_schema = CitySchema()
 cities_schema = CitySchema(many=True)
-
-country_language_schema = CountryLanguageSchema()
-country_languages_schema = CountryLanguageSchema(many = True)
 
 # Routes
 @app.route('/')
@@ -56,43 +54,17 @@ class Countries(MethodView):
      @countries_blp.response(200,countries_schema)
      def get (self):
           """List countries"""
-          return db.session.execute(db.select(Country).order_by(Country.name)).scalars().all()
+          return db.session.execute(select(Country).order_by(Country.name)).scalars().all()
+
+@cities_blp.route("/")
+class Cities(MethodView):
+     @cities_blp.response(200,cities_schema)
+     def get (self):
+          """List cities"""
+          return db.session.execute(select(City).order_by(City.name)).scalars().all()
 
 api.register_blueprint(countries_blp)
-
-""" @app.route('/countries', methods=['GET'])
-def get_countries():
-        all_countries = db.session.execute(db.select(Country).order_by(Country.name)).scalars().all()
-        return countries_schema.dump(all_countries) """
- 
-
-@app.route('/cities', methods=['GET'])
-def get_city_data():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM city''')
-    data = cur.fetchall()
-    cur.close()
-    return jsonify(data)
-
-@app.route('/country/<string:code>', methods=['GET'])
-def get_country_data_by_code(code):
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM country WHERE code = %s''', (code,))
-    data = cur.fetchall()
-    cur.close()
-    return jsonify(data)
-
-@app.route('/city/<int:id>', methods=['GET'])
-def get_city_data_by_id(id):
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT country.name as country, city.name, city.population, city.district, city.id, city.countrycode 
-                FROM city join country on city.CountryCode = country.code 
-                WHERE city.ID = %s''', 
-                (id,))
-    data = cur.fetchall()
-    cur.close()
-    return jsonify(data)
-
+api.register_blueprint(cities_blp)
 
 # Run
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import enum
 
-from typing import List, Optional
+from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, ForeignKey, Enum
