@@ -16,6 +16,9 @@ class CitySchema(ma.SQLAlchemyAutoSchema):
         model = City
         include_fk = True
 
+class CityUpdateArgsSchema (ma.Schema):
+    population = fields.Int()
+
 class CountryLanguageSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = CountryLanguage

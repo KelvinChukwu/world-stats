@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 from flask_smorest import Api, Blueprint, abort
 from sqlalchemy import select
 from models import db, City, Country
-from schemas import CitySchema, ma, CountrySchema
+from schemas import CitySchema, ma, CountrySchema, CityUpdateArgsSchema
 
 
 secrets = dotenv_values(".env")
@@ -82,6 +82,17 @@ class CitiesByCode(MethodView):
         city = db.session.execute(select(City).filter_by(id = id)).scalar()
         if city:
             return city
+        else:
+            abort(404,message ="City not found")
+    
+    @cities_blp.arguments(CityUpdateArgsSchema)
+    @cities_blp.response(200,city_schema)
+    def patch(self, update_data, id):
+        """Update existing city"""
+        city = db.session.execute(select(City).filter_by(id = id)).scalar()
+        if city:
+            city.population = update_data["population"]
+            db.session.commit()
         else:
             abort(404,message ="City not found")
     
