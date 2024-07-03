@@ -70,9 +70,13 @@ class CountriesByCode(MethodView):
 @cities_blp.route("/")
 class Cities(MethodView):
     @cities_blp.response(200,cities_schema)
-    def get (self):
+    @cities_blp.paginate()
+    def get (self, pagination_parameters):
         """List cities"""
-        return db.session.execute(select(City).order_by(City.name)).scalars().all()
+        cities_pagination = db.paginate(select(City).order_by(City.name),page=pagination_parameters.page, per_page=pagination_parameters.page_size)
+        pagination_parameters.item_count = cities_pagination.total
+        print(pagination_parameters)
+        return cities_pagination.items
 
 @cities_blp.route("/<id>")
 class CitiesByCode(MethodView):
