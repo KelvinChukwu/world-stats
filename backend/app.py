@@ -52,9 +52,13 @@ def hello_world():
 @countries_blp.route("/")
 class Countries(MethodView):
     @countries_blp.response(200,countries_schema)
-    def get (self):
+    @countries_blp.paginate()
+    def get (self, pagination_parameters):
         """List countries"""
-        return db.session.execute(select(Country).order_by(Country.name)).scalars().all()
+        countries_pagination = db.paginate(select(Country).order_by(Country.name),page=pagination_parameters.page, per_page=pagination_parameters.page_size)
+        pagination_parameters.item_count = countries_pagination.total
+        print(pagination_parameters)
+        return countries_pagination.items
      
 @countries_blp.route("/<country_code>")
 class CountriesByCode(MethodView):
