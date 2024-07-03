@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, make_response
+from flask.views import MethodView
 from flask_mysqldb import MySQL
 from dotenv import dotenv_values
 from flask_smorest import Api, Blueprint, abort
 from sqlalchemy import select
 from models import db, City, Country, CountryLanguage
-from schemas import ma, CountrySchema
+from schemas import CitySchema, CountryLanguageSchema, ma, CountrySchema
 
 
 secrets = dotenv_values(".env")
@@ -34,19 +35,35 @@ api = Api(app)
 db.init_app(app)
 ma.init_app(app)
 
-countries = Blueprint("countries", "countries",url_prefix = "/countries", description = "Operations on countries")
+countries_blp = Blueprint("countries", "countries",url_prefix = "/countries", description = "Operations on countries")
 
 countries_schema = CountrySchema(many=True)
-     
+country_schema = CountrySchema()
+
+city_schema = CitySchema()
+cities_schema = CitySchema(many=True)
+
+country_language_schema = CountryLanguageSchema()
+country_languages_schema = CountryLanguageSchema(many = True)
+
 # Routes
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
-@app.route('/countries', methods=['GET'])
+@countries_blp.route("/")
+class Countries(MethodView):
+     @countries_blp.response(200,countries_schema)
+     def get (self):
+          """List countries"""
+          return db.session.execute(db.select(Country).order_by(Country.name)).scalars().all()
+
+api.register_blueprint(countries_blp)
+
+""" @app.route('/countries', methods=['GET'])
 def get_countries():
         all_countries = db.session.execute(db.select(Country).order_by(Country.name)).scalars().all()
-        return countries_schema.dump(all_countries)
+        return countries_schema.dump(all_countries) """
  
 
 @app.route('/cities', methods=['GET'])
@@ -75,6 +92,7 @@ def get_city_data_by_id(id):
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
+
 
 # Run
 if __name__ == '__main__':

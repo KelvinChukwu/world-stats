@@ -1,6 +1,7 @@
 import enum
 
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import Optional
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, ForeignKey, Enum
 
@@ -22,9 +23,10 @@ class IsOfficialLanguage (enum.Enum):
 class Country(db.Model):
     code: Mapped[str] = mapped_column(primary_key=True, type_= String(3))
     code2: Mapped[str] = mapped_column(String(2))
-    capital: Mapped[int]
+    capital_id: Mapped[int] = mapped_column(ForeignKey("city.id"),name="capital")
+    capital: Mapped["City"] = relationship(foreign_keys=[capital_id], primaryjoin="Country.capital_id == City.id", lazy="immediate")
     name: Mapped[str] = mapped_column(unique=True)
-    continent: Mapped[Continent] = mapped_column(Enum('Asia','Europe', 'North America', 'Africa','Oceania','Antarctica','South America', name="continet_enum"))
+    continent: Mapped[Continent] = mapped_column(Enum('Asia','Europe', 'North America', 'Africa','Oceania','Antarctica','South America', name="continent_enum"))
     region: Mapped[str]
     surface_area: Mapped[float] = mapped_column(name="SurfaceArea")
     indep_year: Mapped[int] = mapped_column(name="IndepYear")
@@ -38,7 +40,7 @@ class Country(db.Model):
 class City (db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    country_code: Mapped[str] = mapped_column(ForeignKey(Country.code))
+    country_code: Mapped[str] = mapped_column(ForeignKey(Country.code), name="CountryCode")
     district: Mapped[str]
     population: Mapped[int]
 
