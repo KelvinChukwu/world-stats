@@ -1,6 +1,6 @@
 import enum
 
-from typing import Optional
+from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, ForeignKey, Enum
@@ -25,6 +25,7 @@ class Country(db.Model):
     code2: Mapped[str] = mapped_column(String(2))
     capital_id: Mapped[int] = mapped_column(ForeignKey("city.id"),name="capital")
     capital: Mapped["City"] = relationship( primaryjoin="Country.capital_id == City.id")
+    languages: Mapped[List["CountryLanguage"]] = relationship(primaryjoin="Country.code == CountryLanguage.country_code")
     name: Mapped[str] = mapped_column(unique=True)
     continent: Mapped[Continent] = mapped_column(Enum('Asia','Europe', 'North America', 'Africa','Oceania','Antarctica','South America', name="continent_enum"))
     region: Mapped[str]
@@ -45,9 +46,10 @@ class City (db.Model):
     population: Mapped[int]
 
 class CountryLanguage (db.Model):
+    __tablename__ = "countrylanguage"
     language: Mapped[str] = mapped_column(primary_key=True)
-    country_code: Mapped[str] = mapped_column(ForeignKey(Country.code), primary_key=True)
-    is_official: Mapped[IsOfficialLanguage] = mapped_column(name="IsOfficial")
+    country_code: Mapped[str] = mapped_column(ForeignKey(Country.code), primary_key=True, name="CountryCode")
+    is_official: Mapped[IsOfficialLanguage] = mapped_column(Enum('T','F', name="is_official_language_enum"),name="IsOfficial")
     percentage: Mapped[float]
 
 

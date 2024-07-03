@@ -6,16 +6,15 @@ from models import City, Country, CountryLanguage
 ma = Marshmallow()
 
 class CountrySchema(ma.SQLAlchemyAutoSchema):
-     capital = fields.Nested("CitySchema")
-     class Meta:
-          model = Country
-    
-    
+    class Meta:
+        model = Country
+    capital = fields.Nested("CitySchema")
+    languages = fields.Nested("CountryLanguageSchema", many=True)
 
 class CitySchema(ma.SQLAlchemyAutoSchema):
-     class Meta:
-          model = City
+    class Meta:
+        model = City
 
 class CountryLanguageSchema(ma.SQLAlchemyAutoSchema):
-     class Meta:
-          model = CountryLanguage
+    class Meta:
+        model = CountryLanguage
