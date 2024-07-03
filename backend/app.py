@@ -56,13 +56,17 @@ class Countries(MethodView):
           """List countries"""
           return db.session.execute(select(Country).order_by(Country.name)).scalars().all()
      
-
 @countries_blp.route("/<country_code>")
 class CountriesByCode(MethodView):
      @countries_blp.response(200,country_schema)
      def get (self, country_code: str):
           """Return Country based on code"""
-          return db.session.execute(select(Country).filter_by(code = country_code)).scalar()
+          country = db.session.execute(select(Country).filter_by(code = country_code)).scalar()
+          if country:
+               return country
+          else:
+               abort(404,message ="Country not found")
+               
 
 @cities_blp.route("/")
 class Cities(MethodView):
@@ -70,6 +74,17 @@ class Cities(MethodView):
      def get (self):
           """List cities"""
           return db.session.execute(select(City).order_by(City.name)).scalars().all()
+
+@cities_blp.route("/<id>")
+class CitiesByCode(MethodView):
+     @cities_blp.response(200,city_schema)
+     def get (self, id: int):
+          """Return city based on code"""
+          city = db.session.execute(select(City).filter_by(id = id)).scalar()
+          if city:
+               return city
+          else:
+               abort(404,message ="City not found")
 
 api.register_blueprint(countries_blp)
 api.register_blueprint(cities_blp)
