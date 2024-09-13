@@ -38,15 +38,26 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
 
   return (
     <main>
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="#" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Link</NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <nav>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="#" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="#" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Cities</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </nav>
+
+      <div className="flex flex-col items-center justify-between p-24 border-2 border-red-500 m-20">
+        Foobar
+      </div>
     </main>
   );
 }
