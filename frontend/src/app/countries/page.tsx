@@ -16,7 +16,6 @@ import Link from "next/link"
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGE_SIZE = 10
 
-// TODO: Make this a landing page
 
 async function getCountries(page?: number, pageSize?: number) {
   console.log("Page num: ", page)
