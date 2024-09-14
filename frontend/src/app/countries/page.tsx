@@ -14,29 +14,31 @@ import { Country, columns } from "./columns"
 import { DataTable } from "./data-table"
 
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGE_SIZE = 15
 
-export type PaginationState = {
+export type XPagination = {
   page?: number
   total: number
   totalPages: number
   nextPage?: number
   prevPage?: number
   lastPage?: number
+  pageSize: number
 }
 
 type CountryResponse = {
   countries: Country[]
-  pagination: PaginationState
+  pagination: XPagination
 }
 
 
-async function getCountries(page?: number, pageSize?: number): Promise<CountryResponse> {
+async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promise<CountryResponse> {
   // TODO: use URL search params
-  const res = await fetch(`http://127.0.0.1:5000/countries/?page=${page ?? DEFAULT_PAGE}&page_size=${pageSize ?? DEFAULT_PAGE_SIZE}`)
+  const res = await fetch(`http://127.0.0.1:5000/countries/?page=${page ?? DEFAULT_PAGE}&page_size=${pageSize}`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch data')
@@ -63,12 +65,19 @@ async function getCountries(page?: number, pageSize?: number): Promise<CountryRe
       nextPage: paginationRespone?.next_page,
       prevPage: paginationRespone?.prev_page,
       lastPage: paginationRespone?.last_page,
+      pageSize: pageSize,
     }
   }
 }
 
 export default async function Countries({ searchParams }: { searchParams?: { page?: number } }) {
   const countriesPagination = await getCountries(searchParams?.page)
+
+  const handlePageChange = () => {
+    redirect(`/countries?page=${countriesPagination.pagination.nextPage}`)
+  }
+
+
   return (
     <main>
       <nav>
@@ -89,7 +98,7 @@ export default async function Countries({ searchParams }: { searchParams?: { pag
       </nav>
 
       <div className="flex flex-col items-center justify-between m-20">
-        <DataTable columns={columns} data={countriesPagination.countries} pagination={countriesPagination.pagination}/>
+        <DataTable columns={columns} data={countriesPagination.countries} paginationProps={countriesPagination.pagination} />
       </div>
     </main>
   );

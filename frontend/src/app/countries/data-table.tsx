@@ -6,6 +6,7 @@ import {
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
+    PaginationState,
 } from "@tanstack/react-table"
 
 import {
@@ -17,29 +18,44 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-import { PaginationState } from "./page"
+import { XPagination } from "./page"
 
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
-    pagination?: PaginationState
+    paginationProps?: XPagination
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    pagination,
+    paginationProps,
 }: DataTableProps<TData, TValue>) {
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        manualPagination: true,
+
+    // TODO: refactor this to remove the ??
+    const [pagination, setPagination] = useState<PaginationState>({
+        pageIndex: paginationProps?.page ?? 1,
+        pageSize: paginationProps?.pageSize ?? 15,
     })
 
-    console.log(pagination)
+    const table = useReactTable({
+        data: data,
+        columns: columns,
+        getCoreRowModel: getCoreRowModel(),
+        manualPagination: true,
+        rowCount: paginationProps?.total,
+        state: {
+            pagination,
+        },
+        onPaginationChange: setPagination,
+    })
+
+    const pathName = usePathname()
+    const router = useRouter()
 
     return (
         <div>
@@ -91,7 +107,11 @@ export function DataTable<TData, TValue>({
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => table.previousPage()}
+                    onClick={() => {
+                        table.previousPage()
+                        router.push(`${pathName}?page=${pagination.pageIndex - 1}`) // TODO: DEAL WITH ZERO INDEXING
+                    }
+                    }
                     disabled={!table.getCanPreviousPage()}
                 >
                     Previous
@@ -99,7 +119,11 @@ export function DataTable<TData, TValue>({
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => table.nextPage()}
+                    onClick={() => {
+                        table.nextPage()
+                        router.push(`${pathName}?page=${pagination.pageIndex + 1}`)
+                    }
+                    }
                     disabled={!table.getCanNextPage()}
                 >
                     Next
