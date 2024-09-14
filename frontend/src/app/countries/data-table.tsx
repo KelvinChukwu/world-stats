@@ -38,8 +38,8 @@ export function DataTable<TData, TValue>({
 
     // TODO: refactor this to remove the ??
     const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: paginationProps?.page ?? 1,
-        pageSize: paginationProps?.pageSize ?? 15,
+        pageIndex: (paginationProps?.page ?? 1) - 1, // TODO get this from URL search params
+        pageSize: paginationProps?.pageSize ?? 15, // TODO perhaps refactor this to get constant from shared file
     })
 
     const table = useReactTable({
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({
                     size="sm"
                     onClick={() => {
                         table.previousPage()
-                        router.push(`${pathName}?page=${pagination.pageIndex - 1}`) // TODO: DEAL WITH ZERO INDEXING
+                        router.push(`${pathName}?page=${pagination.pageIndex}`)
                     }
                     }
                     disabled={!table.getCanPreviousPage()}
@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
                     size="sm"
                     onClick={() => {
                         table.nextPage()
-                        router.push(`${pathName}?page=${pagination.pageIndex + 1}`)
+                        router.push(`${pathName}?page=${pagination.pageIndex + 2}`) 
                     }
                     }
                     disabled={!table.getCanNextPage()}

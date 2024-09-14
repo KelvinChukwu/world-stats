@@ -20,6 +20,7 @@ import { redirect } from "next/navigation"
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGE_SIZE = 15
 
+// TODO: extract this to a shared file
 export type XPagination = {
   page?: number
   total: number
@@ -72,11 +73,6 @@ async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promis
 
 export default async function Countries({ searchParams }: { searchParams?: { page?: number } }) {
   const countriesPagination = await getCountries(searchParams?.page)
-
-  const handlePageChange = () => {
-    redirect(`/countries?page=${countriesPagination.pagination.nextPage}`)
-  }
-
 
   return (
     <main>
