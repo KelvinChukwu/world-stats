@@ -71,6 +71,8 @@ async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promis
   }
 }
 
+// TODO: make the table a fixed size (or at least all the column widths)
+// TODO if the field value is empty, show a dash
 export default async function Countries({ searchParams }: { searchParams?: { page?: number } }) {
   const countriesPagination = await getCountries(searchParams?.page)
 
