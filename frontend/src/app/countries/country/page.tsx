@@ -121,7 +121,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                     {/*TODO: extract these cards into their own component*/}
                     <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-2">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Geography</CardTitle>
+                            <CardTitle className="font-extrabold text-xl self-center" >Geography</CardTitle>
                         </CardHeader>
                         <CardContent className="grid grid-cols-2 gap-2 justify-items-center grow p-2">
                             <TextPair label="Continent" value="Card Content" />
@@ -130,43 +130,32 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <TextPair label="Capital" value="Card Content" />
                         </CardContent>
                     </Card>
-                    <Card className="border-2 border-red-500 w-96 h-72 row-start-2">
-                        <CardHeader>
-                            <CardTitle>Demographics</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
+                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-2">
+                        <CardHeader className="">
+                            <CardTitle className="font-extrabold text-xl self-center" >Demographics</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p>Card Content</p>
+                        <CardContent className="grid grid-rows-2 justify-items-center grow">
+                            <TextPair label="Population" value="Card Content" />
+                            <TextPair label="Life Expectancy" value="Card Content" />
                         </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
                     </Card>
-
-                    <Card className="border-2 border-red-500 w-96 h-72 row-start-3 ">
-                        <CardHeader>
-                            <CardTitle>Politics</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
+                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-3">
+                        <CardHeader className="">
+                            <CardTitle className="font-extrabold text-xl self-center" >Politics</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p>Card Content</p>
+                        <CardContent className="grid grid-rows-2 gap-2 justify-items-center">
+                            <TextPair label="Independence Year" value="Card Content" />
+                            <TextPair label="Government Form" value="Card Content" />
+                            <TextPair label="Head of State" value="Card Content" />
                         </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
                     </Card>
-
-                    <Card className="border-2 border-red-500 w-96 h-72 row-start-3">
-                        <CardHeader>
-                            <CardTitle>Languages</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
+                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-3">
+                        <CardHeader className="">
+                            <CardTitle className="font-extrabold text-xl self-center" >Languages</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p>Card Content</p>
+                        <CardContent className="grid grid-rows-2 gap-2 justify-items-center">
+                            <TextPair label="Lang List" value="Card Content" />
                         </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
                     </Card>
                     <Button
                         variant="outline"
