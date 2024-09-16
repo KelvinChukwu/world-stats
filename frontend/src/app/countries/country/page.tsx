@@ -16,6 +16,7 @@ import { redirect } from "next/navigation"
 
 import { Country } from "../columns"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 
 const DEFAULT_PAGE = 1
@@ -96,9 +97,15 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                 </NavigationMenu>
             </nav>
 
-            <div className="flex flex-col items-center justify-between m-20">
-                <div className="grid grid-cols-2 gap-16">
-                    <Card className="border-2 border-red-500 w-96 h-72">
+            <div className="flex flex-col justify-between m-8 gap-8">
+                <div className="grid grid-cols-2 gap-8 self-center">
+                    <Button
+                        variant="outline"
+                        className="size-fit"
+                    >
+                        Go Back
+                    </Button>
+                    <Card className="border-2 border-red-500 w-96 h-72 row-start-2">
                         <CardHeader>
                             <CardTitle>Card Title</CardTitle>
                             <CardDescription>Card Description</CardDescription>
@@ -110,7 +117,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <p>Card Footer</p>
                         </CardFooter>
                     </Card>
-                    <Card className="border-2 border-red-500 w-96 h-72">
+                    <Card className="border-2 border-red-500 w-96 h-72 row-start-2">
                         <CardHeader>
                             <CardTitle>Card Title</CardTitle>
                             <CardDescription>Card Description</CardDescription>
@@ -123,7 +130,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                         </CardFooter>
                     </Card>
 
-                    <Card className="border-2 border-red-500 w-96 h-72">
+                    <Card className="border-2 border-red-500 w-96 h-72 row-start-3 ">
                         <CardHeader>
                             <CardTitle>Card Title</CardTitle>
                             <CardDescription>Card Description</CardDescription>
@@ -136,7 +143,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                         </CardFooter>
                     </Card>
 
-                    <Card className="border-2 border-red-500 w-96 h-72">
+                    <Card className="border-2 border-red-500 w-96 h-72 row-start-3">
                         <CardHeader>
                             <CardTitle>Card Title</CardTitle>
                             <CardDescription>Card Description</CardDescription>
@@ -148,6 +155,12 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <p>Card Footer</p>
                         </CardFooter>
                     </Card>
+                    <Button
+                        variant="outline"
+                        className="size-fit row-start-4 col-start-2 justify-self-end"
+                    >
+                        Edit
+                    </Button>
                 </div>
             </div>
         </main>
