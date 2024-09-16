@@ -82,7 +82,7 @@ export default async function Countries({ searchParams }: { searchParams?: { pag
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="#" legacyBehavior passHref>
+              <Link href="/countries" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

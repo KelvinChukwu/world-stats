@@ -11,6 +11,7 @@ export type Country = {
     lifeExpectancy: number
 }
 
+//TODO: add formatting for different columns
 export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "name",
