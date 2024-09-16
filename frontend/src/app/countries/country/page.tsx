@@ -17,6 +17,7 @@ import { redirect } from "next/navigation"
 import { Country } from "../columns"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 
 
 const DEFAULT_PAGE = 1
@@ -73,6 +74,15 @@ async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promis
     }
 }
 
+function TextPair({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="flex flex-col">
+            <span className="font-bold">{label}</span>
+            <span>{value}</span>
+        </div>
+    )
+}
+
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
 export default async function CountryDetailed({ searchParams }: { searchParams?: { page?: number } }) {
@@ -97,7 +107,10 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                 </NavigationMenu>
             </nav>
 
-            <div className="flex flex-col justify-between m-8 gap-8">
+            <Separator />
+
+            <div className="flex flex-col justify-between m-4 gap-4">
+                <h1 className="text-3xl font-semibold">Country Name (Local Name)</h1>
                 <div className="grid grid-cols-2 gap-8 self-center">
                     <Button
                         variant="outline"
@@ -105,21 +118,21 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                     >
                         Go Back
                     </Button>
-                    <Card className="border-2 border-red-500 w-96 h-72 row-start-2">
-                        <CardHeader>
-                            <CardTitle>Card Title</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
+                    {/*TODO: extract these cards into their own component*/}
+                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-2">
+                        <CardHeader className="">
+                            <CardTitle className="font-extrabold text-xl" >Geography</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p>Card Content</p>
+                        <CardContent className="grid grid-cols-2 gap-2 justify-items-center grow p-2">
+                            <TextPair label="Continent" value="Card Content" />
+                            <TextPair label="Region" value="Card Content" />
+                            <TextPair label="Surface Area" value="Card Content" />
+                            <TextPair label="Capital" value="Card Content" />
                         </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
                     </Card>
                     <Card className="border-2 border-red-500 w-96 h-72 row-start-2">
                         <CardHeader>
-                            <CardTitle>Card Title</CardTitle>
+                            <CardTitle>Demographics</CardTitle>
                             <CardDescription>Card Description</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -132,7 +145,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
 
                     <Card className="border-2 border-red-500 w-96 h-72 row-start-3 ">
                         <CardHeader>
-                            <CardTitle>Card Title</CardTitle>
+                            <CardTitle>Politics</CardTitle>
                             <CardDescription>Card Description</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -145,7 +158,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
 
                     <Card className="border-2 border-red-500 w-96 h-72 row-start-3">
                         <CardHeader>
-                            <CardTitle>Card Title</CardTitle>
+                            <CardTitle>Languages</CardTitle>
                             <CardDescription>Card Description</CardDescription>
                         </CardHeader>
                         <CardContent>
