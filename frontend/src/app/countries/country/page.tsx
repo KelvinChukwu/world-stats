@@ -32,10 +32,6 @@ const chartData = [
       label: "Desktop",
       color: "hsl(var(--chart-2))",
     },
-    mobile: {
-      label: "Mobile",
-      color: "hsl(var(--chart-2))",
-    },
     label: {
       color: "hsl(var(--background))",
     },
