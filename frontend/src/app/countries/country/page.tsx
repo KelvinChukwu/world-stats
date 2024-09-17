@@ -87,10 +87,9 @@ function TextPair({ label, value }: { label: string; value: string }) {
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
-export default async function CountryDetailedPage({ searchParams }: { searchParams?: { countryCode?: string } }) {
+export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
-    const country = await getCountry(countryCode ?? "USA") // TODO: make this code non-nullable
-    console.log(country)
+    const country = await getCountry(countryCode) // TODO: make this code non-nullable
     return (
         <main>
             <nav>
@@ -113,7 +112,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
             <Separator />
 
             <div className="flex flex-col justify-between m-4 gap-4">
-                <h1 className="text-3xl font-semibold">Country Name (Local Name)</h1>
+                <h1 className="text-3xl font-semibold">{`${country.name} (${country.localName})`}</h1>
                 <div className="grid grid-cols-2 gap-8 self-center">
                     <Button
                         variant="outline"
@@ -124,39 +123,39 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                     {/*TODO: extract these cards into their own component*/}
                     <Card className="flex flex-col w-96 h-72 row-start-2">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl self-center" >Geography</CardTitle>
+                            <CardTitle className="font-extrabold text-xl" >Geography</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-2 justify-items-center grow p-2">
-                            <TextPair label="Continent" value="Card Content" />
-                            <TextPair label="Region" value="Card Content" />
-                            <TextPair label="Surface Area" value="Card Content" />
-                            <TextPair label="Capital" value="Card Content" />
+                        <CardContent className="grid grid-cols-2 gap-2 justify-self-center grow">
+                            <TextPair label="Continent" value={country.continent} />
+                            <TextPair label="Region" value={country.region} />
+                            <TextPair label="Surface Area" value={`${country.surfaceArea.toLocaleString()} km²`} />
+                            <TextPair label="Capital" value={country.capital} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-2">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl self-center" >Demographics</CardTitle>
+                            <CardTitle className="font-extrabold text-xl" >Demographics</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-rows-2 justify-items-center grow">
-                            <TextPair label="Population" value="Card Content" />
-                            <TextPair label="Life Expectancy" value="Card Content" />
+                        <CardContent className="grid grid-rows-2 grow">
+                            <TextPair label="Population" value={country.population.toLocaleString()} />
+                            <TextPair label="Life Expectancy" value={`${country.lifeExpectancy} years`} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-3">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl self-center" >Politics</CardTitle>
+                            <CardTitle className="font-extrabold text-xl" >Politics</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-rows-2 gap-2 justify-items-center">
-                            <TextPair label="Independence Year" value="Card Content" />
-                            <TextPair label="Government Form" value="Card Content" />
-                            <TextPair label="Head of State" value="Card Content" />
+                        <CardContent className="grid grid-rows-2 gap-2 grow">
+                            <TextPair label="Independence Year" value={country.independenceYear.toString()} />
+                            <TextPair label="Government Form" value={country.governmentForm} />
+                            <TextPair label="Head of State" value={country.headOfState} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-3">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl self-center" >Languages</CardTitle>
+                            <CardTitle className="font-extrabold text-xl" >Languages</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-rows-2 gap-2 justify-items-center">
+                        <CardContent className="grid grid-rows-2">
                             <TextPair label="Lang List" value="Card Content" />
                         </CardContent>
                     </Card>
