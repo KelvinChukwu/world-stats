@@ -10,13 +10,14 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
-
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { WorldStatsPieChart } from "./WorldStatsPieChart"
+
 
 
 const DEFAULT_PAGE = 1
@@ -92,7 +93,7 @@ function TextPair({ label, value }: { label: string; value: string }) {
 export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
     const country = await getCountry(countryCode) // TODO: make this code non-nullable
-    console.log(country)
+
     return (
         <main>
             <nav>
@@ -154,12 +155,12 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <TextPair label="Head of State" value={country.headOfState} />
                         </CardContent>
                     </Card>
-                    <Card className="flex flex-col  w-96 h-72 row-start-3">
+                    <Card className="flex flex-col w-96 h-72 row-start-3">
                         <CardHeader className="">
                             <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
                         </CardHeader>
-                        <CardContent className="grid grid-rows-2">
-                            <TextPair label="Lang List" value="Card Content" />
+                        <CardContent>
+                            <WorldStatsPieChart/>
                         </CardContent>
                     </Card>
                     <Button
