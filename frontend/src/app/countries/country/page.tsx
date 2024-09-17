@@ -14,7 +14,6 @@ import {
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-import { Country } from "../columns"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -34,43 +33,46 @@ export type XPagination = {
     pageSize: number
 }
 
-type CountryResponse = {
-    countries: Country[]
-    pagination: XPagination
+type CountryDetailed = {
+    code: string
+    name: string
+    localName: string
+    continent: string // TODO: add enum
+    population: number
+    surfaceArea: number
+    lifeExpectancy: number
+    capital: string
+    region: string
+    independenceYear: number
+    governmentForm: string
+    headOfState: string
+    //languages: string[] make this COUNTRYLANGUAGE type
 }
 
 
-async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promise<CountryResponse> {
+async function getCountry(code: string): Promise<CountryDetailed> {
     // TODO: use URL search params
-    const res = await fetch(`http://127.0.0.1:5000/countries/?page=${page ?? DEFAULT_PAGE}&page_size=${pageSize}`)
+    const res = await fetch(`http://127.0.0.1:5000/countries/${code}`)
 
     if (!res.ok) {
         throw new Error('Failed to fetch data')
     }
-    const paginationRespone = JSON.parse(res.headers.get('x-pagination') ?? '{}')
-    const resJSON = await res.json()
+    const country = await res.json()
 
-    const countries: Country[] = resJSON.map((country: { code: string; name: string; continent: string; population: number; surface_area: number; life_expectancy: number }) => {
-        return {
-            code: country.code,
-            name: country.name,
-            continent: country.continent,
-            population: country.population,
-            surfaceArea: country.surface_area,
-            lifeExpectancy: country.life_expectancy
-        }
-    })
     return {
-        countries,
-        pagination: {
-            total: paginationRespone.total,
-            totalPages: paginationRespone.total_pages,
-            page: paginationRespone?.page,
-            nextPage: paginationRespone?.next_page,
-            prevPage: paginationRespone?.prev_page,
-            lastPage: paginationRespone?.last_page,
-            pageSize: pageSize,
-        }
+        code: country.code,
+        name: country.name,
+        localName: country.local_name,
+        continent: country.continent,
+        population: country.population,
+        surfaceArea: country.surface_area,
+        lifeExpectancy: country.life_expectancy,
+        capital: country.capital.name,
+        region: country.region,
+        independenceYear: country.indep_year,
+        governmentForm: country.government_form,
+        headOfState: country.head_of_state,
+        //languages: country.languages,
     }
 }
 
@@ -85,9 +87,10 @@ function TextPair({ label, value }: { label: string; value: string }) {
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
-export default async function CountryDetailed({ searchParams }: { searchParams?: { countryCode?: string } }) {
+export default async function CountryDetailedPage({ searchParams }: { searchParams?: { countryCode?: string } }) {
     const countryCode = searchParams?.countryCode
-    
+    const country = await getCountry(countryCode ?? "USA") // TODO: make this code non-nullable
+    console.log(country)
     return (
         <main>
             <nav>
@@ -119,7 +122,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                         Go Back
                     </Button>
                     {/*TODO: extract these cards into their own component*/}
-                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-2">
+                    <Card className="flex flex-col w-96 h-72 row-start-2">
                         <CardHeader className="">
                             <CardTitle className="font-extrabold text-xl self-center" >Geography</CardTitle>
                         </CardHeader>
@@ -130,7 +133,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <TextPair label="Capital" value="Card Content" />
                         </CardContent>
                     </Card>
-                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-2">
+                    <Card className="flex flex-col  w-96 h-72 row-start-2">
                         <CardHeader className="">
                             <CardTitle className="font-extrabold text-xl self-center" >Demographics</CardTitle>
                         </CardHeader>
@@ -139,7 +142,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <TextPair label="Life Expectancy" value="Card Content" />
                         </CardContent>
                     </Card>
-                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-3">
+                    <Card className="flex flex-col  w-96 h-72 row-start-3">
                         <CardHeader className="">
                             <CardTitle className="font-extrabold text-xl self-center" >Politics</CardTitle>
                         </CardHeader>
@@ -149,7 +152,7 @@ export default async function CountryDetailed({ searchParams }: { searchParams?:
                             <TextPair label="Head of State" value="Card Content" />
                         </CardContent>
                     </Card>
-                    <Card className="flex flex-col border-2 border-red-500 w-96 h-72 row-start-3">
+                    <Card className="flex flex-col  w-96 h-72 row-start-3">
                         <CardHeader className="">
                             <CardTitle className="font-extrabold text-xl self-center" >Languages</CardTitle>
                         </CardHeader>
