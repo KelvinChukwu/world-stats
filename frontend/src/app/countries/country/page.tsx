@@ -190,7 +190,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
                         </CardHeader>
                         <CardContent>
-                            <WorldStatsBarChart chartConfig={chartConfig} chartData={chartData}/>
+                            <WorldStatsBarChart chartConfig={chartConfig} chartData={chartData} xAxisDataKey="desktop" yAxisDataKey="month"/>
                         </CardContent>
                     </Card>
                     <Button

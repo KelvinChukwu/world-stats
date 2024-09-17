@@ -13,7 +13,7 @@ import {
 
 export const description = "A pie chart with a legend"
 
-export function WorldStatsBarChart<TData>({ chartData, chartConfig}: { chartData: TData[], chartConfig: ChartConfig}) {
+export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey, yAxisDataKey}: { chartData: TData[], chartConfig: ChartConfig, xAxisDataKey: string, yAxisDataKey:string}) {
   return (
     <ChartContainer
       config={chartConfig}
@@ -28,7 +28,7 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig}: { chartData
       >
         <CartesianGrid horizontal={false} />
         <YAxis
-          dataKey="month"
+          dataKey={yAxisDataKey}
           type="category"
           tickLine={false}
           tickMargin={10}
@@ -36,26 +36,26 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig}: { chartData
           tickFormatter={(value) => value.slice(0, 3)}
           hide
         />
-        <XAxis dataKey="desktop" type="number" hide />
+        <XAxis dataKey={xAxisDataKey} type="number" hide />
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent indicator="line" />}
         />
         <Bar
-          dataKey="desktop"
+          dataKey={xAxisDataKey}
           layout="vertical"
           fill="var(--color-desktop)"
           radius={4}
         >
           <LabelList
-            dataKey="month"
+            dataKey={yAxisDataKey}
             position="insideLeft"
             offset={8}
             className="fill-[--color-label]"
             fontSize={12}
           />
           <LabelList
-            dataKey="desktop"
+            dataKey={xAxisDataKey}
             position="right"
             offset={8}
             className="fill-foreground"
