@@ -16,40 +16,28 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { WorldStatsPieChart } from "./WorldStatsPieChart"
+import { WorldStatsBarChart } from "./WorldStatsBarChart"
 import { ChartConfig } from "@/components/ui/chart"
 
 const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 90, fill: "var(--color-other)" },
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
   ]
-  
   const chartConfig = {
-    visitors: {
-      label: "Visitors",
-    },
-    chrome: {
-      label: "Chrome",
+    desktop: {
+      label: "Desktop",
       color: "hsl(var(--chart-1))",
     },
-    safari: {
-      label: "Safari",
+    mobile: {
+      label: "Mobile",
       color: "hsl(var(--chart-2))",
     },
-    firefox: {
-      label: "Firefox",
-      color: "hsl(var(--chart-3))",
-    },
-    edge: {
-      label: "Edge",
-      color: "hsl(var(--chart-4))",
-    },
-    other: {
-      label: "Other",
-      color: "hsl(var(--chart-5))",
+    label: {
+      color: "hsl(var(--background))",
     },
   } satisfies ChartConfig
 
@@ -127,7 +115,14 @@ function TextPair({ label, value }: { label: string; value: string }) {
 // TODO if the field value is empty, show a dash
 export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
-    const country = await getCountry(countryCode) // TODO: make this code non-nullable
+    const country = await getCountry(countryCode) 
+
+    const countryLanguageData = country.languages.map((language: { countryCode: string; language: string; isOfficial: boolean; percentage: number }) => ({
+        countryCode: language.countryCode,
+        language: language.language,
+        isOfficial: language.isOfficial,
+        percentage: language.percentage,
+    }))
 
     return (
         <main>
@@ -195,7 +190,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
                         </CardHeader>
                         <CardContent>
-                            <WorldStatsPieChart chartConfig={chartConfig} chartData={chartData} dataKey="visitors" nameKey="browser" />
+                            <WorldStatsBarChart chartConfig={chartConfig} chartData={chartData}/>
                         </CardContent>
                     </Card>
                     <Button
