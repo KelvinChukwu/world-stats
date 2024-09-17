@@ -85,9 +85,9 @@ function TextPair({ label, value }: { label: string; value: string }) {
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
-export default async function CountryDetailed({ searchParams }: { searchParams?: { page?: number } }) {
-    const countriesPagination = await getCountries(searchParams?.page)
-
+export default async function CountryDetailed({ searchParams }: { searchParams?: { countryCode?: string } }) {
+    const countryCode = searchParams?.countryCode
+    
     return (
         <main>
             <nav>
