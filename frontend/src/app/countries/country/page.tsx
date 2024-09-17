@@ -23,14 +23,11 @@ const DEFAULT_PAGE = 1
 const DEFAULT_PAGE_SIZE = 15
 
 // TODO: extract this to a shared file
-export type XPagination = {
-    page?: number
-    total: number
-    totalPages: number
-    nextPage?: number
-    prevPage?: number
-    lastPage?: number
-    pageSize: number
+type CountryLanguage = {
+    countryCode: string
+    language: string
+    isOfficial: boolean
+    percentage: number
 }
 
 type CountryDetailed = {
@@ -46,7 +43,7 @@ type CountryDetailed = {
     independenceYear: number
     governmentForm: string
     headOfState: string
-    //languages: string[] make this COUNTRYLANGUAGE type
+    languages: CountryLanguage[]
 }
 
 
@@ -72,7 +69,12 @@ async function getCountry(code: string): Promise<CountryDetailed> {
         independenceYear: country.indep_year,
         governmentForm: country.government_form,
         headOfState: country.head_of_state,
-        //languages: country.languages,
+        languages: country.languages.map((language: { country_code: string; language: string; is_official: string; percentage: number }) => ({
+            countryCode: language.country_code,
+            language: language.language,
+            isOfficial: language.is_official === 'T' ? true : false,
+            percentage: language.percentage,
+        })),
     }
 }
 
@@ -90,6 +92,7 @@ function TextPair({ label, value }: { label: string; value: string }) {
 export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
     const country = await getCountry(countryCode) // TODO: make this code non-nullable
+    console.log(country)
     return (
         <main>
             <nav>
@@ -153,7 +156,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-3">
                         <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Languages</CardTitle>
+                            <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
                         </CardHeader>
                         <CardContent className="grid grid-rows-2">
                             <TextPair label="Lang List" value="Card Content" />
