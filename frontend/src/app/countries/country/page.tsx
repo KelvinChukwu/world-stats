@@ -20,12 +20,12 @@ import { WorldStatsBarChart } from "./WorldStatsBarChart"
 import { ChartConfig } from "@/components/ui/chart"
 
 const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+    { month: "January", desktop: 90, mobile: 80 },
+    { month: "February", desktop: 40, mobile: 200 },
+    { month: "March", desktop: 0.2, mobile: 120 },
+    { month: "April", desktop: 10, mobile: 190 },
+    { month: "May", desktop: 11, mobile: 130 },
+    { month: "June", desktop: 0.9, mobile: 140 },
   ]
   const chartConfig = {
     desktop: {
@@ -186,7 +186,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
                         </CardHeader>
                         <CardContent>
-                            <WorldStatsBarChart chartConfig={chartConfig} chartData={chartData} xAxisDataKey="desktop" yAxisDataKey="month"/>
+                            <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language"/>
                         </CardContent>
                     </Card>
                     <Button

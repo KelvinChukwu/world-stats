@@ -13,7 +13,7 @@ import {
 
 export const description = "A pie chart with a legend"
 
-export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey, yAxisDataKey}: { chartData: TData[], chartConfig: ChartConfig, xAxisDataKey: string, yAxisDataKey:string}) {
+export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey, yAxisDataKey }: { chartData: TData[], chartConfig: ChartConfig, xAxisDataKey: string, yAxisDataKey: string }) {
   return (
     <ChartContainer
       config={chartConfig}
@@ -60,6 +60,7 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey
             offset={8}
             className="fill-foreground"
             fontSize={12}
+            formatter={(value: number) => new Intl.NumberFormat('en', { style: "percent", minimumFractionDigits:1 }).format(value/100)} // TODO: render fractional percentages better
           />
         </Bar>
       </BarChart>
