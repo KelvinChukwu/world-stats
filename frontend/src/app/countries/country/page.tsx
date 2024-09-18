@@ -188,7 +188,6 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button
-                                variant="outline"
                                 className="size-fit row-start-4 col-start-2 justify-self-end"
                             >
                                 Edit
