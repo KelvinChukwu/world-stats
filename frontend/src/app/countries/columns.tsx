@@ -27,13 +27,17 @@ export const columns: ColumnDef<Country>[] = [
         cell: ({ row }) => {
             const population = parseInt(row.getValue("population"))
             const formatted = population.toLocaleString("en-US")
-
             return <p>{formatted}</p>
         },
     },
     {
         accessorKey: "surfaceArea",
         header: "Surface Area",
+        cell: ({ row }) => {
+            const surfaceArea = parseInt(row.getValue("surfaceArea"))
+            const formatted = `${surfaceArea.toLocaleString()} km²` // TODO: consider extracting these formatting fcts to shared utils file
+            return <p>{formatted}</p>
+        },
     },
     {
         accessorKey: "lifeExpectancy",
