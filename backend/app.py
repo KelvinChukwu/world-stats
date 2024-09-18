@@ -2,10 +2,10 @@ from flask import Flask
 from flask.views import MethodView
 from flask_mysqldb import MySQL
 from dotenv import dotenv_values
-from flask_smorest import Api, Blueprint, abort
+from flask_smorest import Api, Blueprint, abort, Page
 from sqlalchemy import select
 from models import db, City, Country
-from schemas import CitySchema, ma, CountrySchema, CityUpdateArgsSchema, CountryUpdateArgsSchema
+from schemas import CitySchema, CountryQueryArgsSchema, ma, CountrySchema, CityUpdateArgsSchema, CountryUpdateArgsSchema
 
 
 secrets = dotenv_values(".env")
@@ -51,9 +51,10 @@ def hello_world():
 
 @countries_blp.route("/")
 class Countries(MethodView):
+    @countries_blp.arguments(CountryQueryArgsSchema, location="query")
     @countries_blp.response(200,countries_schema)
     @countries_blp.paginate()
-    def get (self, pagination_parameters):
+    def get (self, queryArgs, pagination_parameters:Page):
         """List countries"""
         countries_pagination = db.paginate(select(Country).order_by(Country.name),page=pagination_parameters.page, per_page=pagination_parameters.page_size)
         pagination_parameters.item_count = countries_pagination.total

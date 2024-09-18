@@ -2,7 +2,7 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from marshmallow_sqlalchemy import auto_field
 
-from models import City, Country, CountryLanguage
+from models import City, Country, CountryLanguage, Continent
 
 ma = Marshmallow()
 
@@ -11,6 +11,10 @@ class CountrySchema(ma.SQLAlchemyAutoSchema):
         model = Country
     capital = fields.Nested("CitySchema")
     languages = fields.Nested("CountryLanguageSchema", many=True)
+
+class CountryQueryArgsSchema (ma.Schema):
+    name = fields.Str(allow_none=True)
+    continent = fields.Enum(Continent, allow_none=True) # TODO: make this a multi-select, if possible
 
 class CountryUpdateArgsSchema (ma.Schema):
     population = fields.Int(allow_none=True)
