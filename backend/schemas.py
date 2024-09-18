@@ -1,5 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
+from marshmallow_sqlalchemy import auto_field
 
 from models import City, Country, CountryLanguage
 
@@ -21,6 +22,7 @@ class CitySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = City
         include_fk = True
+    country_name = auto_field()
 
 class CityUpdateArgsSchema (ma.Schema):
     population = fields.Int()

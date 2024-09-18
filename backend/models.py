@@ -4,6 +4,8 @@ from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, ForeignKey, Enum
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.associationproxy import AssociationProxy
 
 db = SQLAlchemy()
 
@@ -42,6 +44,8 @@ class City (db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     country_code: Mapped[str] = mapped_column(ForeignKey(Country.code), name="CountryCode")
+    country: Mapped[Country] = relationship(primaryjoin="City.country_code == Country.code")
+    country_name: AssociationProxy[str] = association_proxy("country", "name")
     district: Mapped[str]
     population: Mapped[int]
 
