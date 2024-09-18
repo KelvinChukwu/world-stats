@@ -24,7 +24,8 @@ export const columns: ColumnDef<Country>[] = [
             if (countryCode === "AFG"){
                 console.log("hello AFG")
             }
-            return <Link href={`/countries/country?countryCode=${countryCode}`}>{name}</Link>
+            //TODO: wrap this in a tooltip to share that it will navigate you to a new page
+            return <Link href={`/countries/country?countryCode=${countryCode}`} className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{name}</Link>
         }
     },
     {
