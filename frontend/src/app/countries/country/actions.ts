@@ -28,10 +28,6 @@ export async function updateCountry(countryCode: string | null, formData: FormDa
         head_of_state: rawFormData.headOfState,
         population: rawFormData.population,
     }
-    console.log(JSON.stringify(formattedFormData))
-
-    // console.log(JSON.stringify(rawFormData))
-
 
     const response = await fetch(`http://127.0.0.1:5000/countries/${countryCode}`, {
         method: 'PATCH',
@@ -43,5 +39,7 @@ export async function updateCountry(countryCode: string | null, formData: FormDa
     /* if (!response.ok) {
         throw new Error("Failed to update country");
     } */
+   // TODO: give response on failure
     revalidatePath("/countries/country");
+    revalidatePath("/countries");
 }
