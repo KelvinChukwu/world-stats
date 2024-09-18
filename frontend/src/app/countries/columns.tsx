@@ -24,6 +24,12 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "population",
         header: "Population",
+        cell: ({ row }) => {
+            const population = parseInt(row.getValue("population"))
+            const formatted = population.toLocaleString("en-US")
+
+            return <p>{formatted}</p>
+        },
     },
     {
         accessorKey: "surfaceArea",
