@@ -18,6 +18,9 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { WorldStatsBarChart } from "./WorldStatsBarChart"
 import { ChartConfig } from "@/components/ui/chart"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const chartConfig = {
     language: {
@@ -159,7 +162,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                         </CardHeader>
                         <CardContent className="grid grid-rows-2 grow">
                             <TextPair label="Population" value={country.population.toLocaleString()} />
-                            <TextPair label="Life Expectancy" value={country.lifeExpectancy ? `${country?.lifeExpectancy} years`: '-'} />
+                            <TextPair label="Life Expectancy" value={country.lifeExpectancy ? `${country?.lifeExpectancy} years` : '-'} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-3">
@@ -181,12 +184,41 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language" />
                         </CardContent>
                     </Card>
-                    <Button
-                        variant="outline"
-                        className="size-fit row-start-4 col-start-2 justify-self-end"
-                    >
-                        Edit
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className="size-fit row-start-4 col-start-2 justify-self-end"
+                            >
+                                Edit
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Edit profile</DialogTitle>
+                                <DialogDescription>
+                                    Make changes to your profile here. Click save when you're done.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="name" className="text-right">
+                                        Name
+                                    </Label>
+                                    <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="username" className="text-right">
+                                        Username
+                                    </Label>
+                                    <Input id="username" value="@peduarte" className="col-span-3" />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
         </main>
