@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label"
 const wait = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 // TODO: MAKE SURE DIALOG CANNOT BE CLOSED WHILE REQUEST IS PENDING
+// TODO: cache revalidation after form submission
+// TODO: success/error messages
 
 export function WorldStatsUpdateCountryDialogContent() {
   return (
