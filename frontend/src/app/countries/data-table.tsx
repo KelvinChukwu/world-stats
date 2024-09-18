@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
     paginationProps?: XPagination
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string }, TValue>({
     columns,
     data,
     paginationProps,
@@ -45,6 +45,7 @@ export function DataTable<TData, TValue>({
     const table = useReactTable({
         data: data,
         columns: columns,
+        getRowId: originalRow => originalRow.id,
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
         rowCount: paginationProps?.total,

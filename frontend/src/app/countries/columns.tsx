@@ -16,6 +16,15 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "name",
         header: "Name",
+        cell: ({ row }) => {
+            const name = String(row.getValue("name"))
+            const countryCode = row.id
+            console.log(countryCode)
+            if (countryCode === "AFG"){
+                console.log("hello AFG")
+            }
+            return <p>{name}</p>
+        }
     },
     {
         accessorKey: "continent",
@@ -42,5 +51,10 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "lifeExpectancy",
         header: "Life Expectancy",
+        cell: ({ row }) => {
+            const lifeExpectancy = parseInt(row.getValue("lifeExpectancy"))
+            const formatted = lifeExpectancy ? `${lifeExpectancy} years` : '-' 
+            return <p className="text-center">{formatted}</p>
+        }
     },
 ]

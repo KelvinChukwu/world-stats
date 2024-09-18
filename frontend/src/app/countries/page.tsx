@@ -49,7 +49,7 @@ async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promis
 
   const countries: Country[] = resJSON.map((country: { code: string; name: string; continent: string; population: number; surface_area: number; life_expectancy: number }) => {
     return {
-      code: country.code,
+      id: country.code,
       name: country.name,
       continent: country.continent,
       population: country.population,
