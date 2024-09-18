@@ -16,35 +16,23 @@ import { Label } from "@/components/ui/label"
 import { useSearchParams } from "next/navigation"
 import { updateCountry } from "./actions"
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 2000));
-
 // TODO: MAKE SURE DIALOG CANNOT BE CLOSED WHILE REQUEST IS PENDING
 // TODO: cache revalidation after form submission
 // TODO: success/error messages
 
 export function WorldStatsUpdateCountryDialogContent() {
   const countryCode = useSearchParams().get("countryCode")
-  console.log(countryCode)
-
   const updateCountryWithCountryCode = updateCountry.bind(null, countryCode)
 
   return (
     <DialogContent className="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle>Edit profile</DialogTitle>
+        <DialogTitle>Edit Country</DialogTitle>
         <DialogDescription>
-          Make changes to your profile here. Click save when you're done.
+          Make changes to a country's attributes here. Click "Save changes" to submit.
         </DialogDescription>
       </DialogHeader>
-      <form
-        /* onSubmit={ (event) => {
-          const foo = wait().then(() => {
-            console.log("submitted");
-          });
-          event.preventDefault();
-        }} */
-        action={updateCountryWithCountryCode}
-      >
+      <form action={updateCountryWithCountryCode}>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="population" className="text-right">
