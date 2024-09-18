@@ -1,6 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import Link from "next/link"
 
 export type Country = {
     id: string
@@ -23,7 +24,7 @@ export const columns: ColumnDef<Country>[] = [
             if (countryCode === "AFG"){
                 console.log("hello AFG")
             }
-            return <p>{name}</p>
+            return <Link href={`/countries/country?countryCode=${countryCode}`}>{name}</Link>
         }
     },
     {
