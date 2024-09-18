@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useSearchParams } from "next/navigation"
+import { updateCountry } from "./actions"
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -21,8 +23,13 @@ const wait = () => new Promise((resolve) => setTimeout(resolve, 2000));
 // TODO: success/error messages
 
 export function WorldStatsUpdateCountryDialogContent() {
+  const countryCode = useSearchParams().get("countryCode")
+  console.log(countryCode)
+
+  const updateCountryWithCountryCode = updateCountry.bind(null, countryCode)
+
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:max-w-[600px]">
       <DialogHeader>
         <DialogTitle>Edit profile</DialogTitle>
         <DialogDescription>
@@ -30,25 +37,32 @@ export function WorldStatsUpdateCountryDialogContent() {
         </DialogDescription>
       </DialogHeader>
       <form
-        onSubmit={ (event) => {
+        /* onSubmit={ (event) => {
           const foo = wait().then(() => {
             console.log("submitted");
           });
           event.preventDefault();
-        }}
+        }} */
+        action={updateCountryWithCountryCode}
       >
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
+            <Label htmlFor="population" className="text-right">
+              Population
             </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+            <Input name="population" className="col-span-3" type="number" min="0" step="1" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
+            <Label htmlFor="lifeExpectancy" className="text-right">
+              Life Expectancy
             </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
+            <Input name="lifeExpectancy" className="col-span-3" type="number" min="0" step="0.1" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="headOfState" className="text-right">
+              Head of State
+            </Label>
+            <Input name="headOfState" className="col-span-3" />
           </div>
         </div>
         <DialogFooter>
