@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 from flask_smorest import Api, Blueprint, abort
 from sqlalchemy import select
 from models import db, City, Country
-from schemas import CitySchema, ma, CountrySchema, CityUpdateArgsSchema
+from schemas import CitySchema, ma, CountrySchema, CityUpdateArgsSchema, CountryUpdateArgsSchema
 
 
 secrets = dotenv_values(".env")
@@ -70,6 +70,24 @@ class CountriesByCode(MethodView):
             return country
         else:
             abort(404,message ="Country not found")
+    
+    @cities_blp.arguments(CountryUpdateArgsSchema)
+    @cities_blp.response(200,country_schema)
+    def patch(self, update_data, country_code):
+        """Update existing country"""
+        country = db.session.execute(select(Country).filter_by(code = country_code)).scalar()
+        if country:
+            if "population" in update_data and update_data["population"]:
+                country.population = update_data["population"]
+            if "life_expectancy" in update_data and update_data["life_expectancy"]:
+                country.life_expectancy = update_data["life_expectancy"]
+            if "head_of_state" in update_data and  update_data["head_of_state"]:
+                country.head_of_state = update_data["head_of_state"]
+            if "government_form" in update_data and update_data["government_form"]:
+                country.government_form = update_data["government_form"]
+            db.session.commit()
+        else:
+            abort(404,message ="Country not found")
                
 @cities_blp.route("/")
 class Cities(MethodView):
@@ -95,7 +113,7 @@ class CitiesByCode(MethodView):
     
     @cities_blp.arguments(CityUpdateArgsSchema)
     @cities_blp.response(200,city_schema)
-    def patch(self, update_data, id):
+    def patch(self, update_data, id: int):
         """Update existing city"""
         city = db.session.execute(select(City).filter_by(id = id)).scalar()
         if city:

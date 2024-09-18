@@ -26,16 +26,16 @@ const chartData = [
     { month: "April", desktop: 10, mobile: 190 },
     { month: "May", desktop: 11, mobile: 130 },
     { month: "June", desktop: 0.9, mobile: 140 },
-  ]
-  const chartConfig = {
+]
+const chartConfig = {
     desktop: {
-      label: "Desktop",
-      color: "hsl(var(--chart-2))",
+        label: "Desktop",
+        color: "hsl(var(--chart-2))",
     },
     label: {
-      color: "hsl(var(--background))",
+        color: "hsl(var(--background))",
     },
-  } satisfies ChartConfig
+} satisfies ChartConfig
 
 
 
@@ -83,12 +83,12 @@ async function getCountry(code: string): Promise<CountryDetailed> {
         continent: country.continent,
         population: country.population,
         surfaceArea: country.surface_area,
-        lifeExpectancy: country.life_expectancy,
-        capital: country.capital.name,
+        lifeExpectancy: country?.life_expectancy,
+        capital: country.capital?.name,
         region: country.region,
-        independenceYear: country.indep_year,
+        independenceYear: country?.indep_year,
         governmentForm: country.government_form,
-        headOfState: country.head_of_state,
+        headOfState: country?.head_of_state,
         languages: country.languages.map((language: { country_code: string; language: string; is_official: string; percentage: number }) => ({
             countryCode: language.country_code,
             language: language.language,
@@ -111,14 +111,14 @@ function TextPair({ label, value }: { label: string; value: string }) {
 // TODO if the field value is empty, show a dash
 export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
-    const country = await getCountry(countryCode) 
+    const country = await getCountry(countryCode)
 
     const countryLanguageData = country.languages.map((language: { countryCode: string; language: string; isOfficial: boolean; percentage: number }) => ({
         countryCode: language.countryCode,
         language: language.language,
         isOfficial: language.isOfficial,
         percentage: language.percentage,
-    }))
+    })).filter(language => language.isOfficial)
 
     return (
         <main>
@@ -159,7 +159,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <TextPair label="Continent" value={country.continent} />
                             <TextPair label="Region" value={country.region} />
                             <TextPair label="Surface Area" value={`${country.surfaceArea.toLocaleString()} km²`} />
-                            <TextPair label="Capital" value={country.capital} />
+                            <TextPair label="Capital" value={country?.capital ?? '-'} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-2">
@@ -168,7 +168,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                         </CardHeader>
                         <CardContent className="grid grid-rows-2 grow">
                             <TextPair label="Population" value={country.population.toLocaleString()} />
-                            <TextPair label="Life Expectancy" value={`${country.lifeExpectancy} years`} />
+                            <TextPair label="Life Expectancy" value={country.lifeExpectancy ? `${country?.lifeExpectancy} years`: '-'} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col  w-96 h-72 row-start-3">
@@ -176,17 +176,18 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                             <CardTitle className="font-extrabold text-xl" >Politics</CardTitle>
                         </CardHeader>
                         <CardContent className="grid grid-rows-2 gap-2 grow">
-                            <TextPair label="Independence Year" value={country.independenceYear.toString()} />
+                            <TextPair label="Independence Year" value={(country?.independenceYear ? country?.independenceYear.toString() : '-')} />
                             <TextPair label="Government Form" value={country.governmentForm} />
-                            <TextPair label="Head of State" value={country.headOfState} />
+                            <TextPair label="Head of State" value={country.headOfState ?? '-'} />
                         </CardContent>
                     </Card>
                     <Card className="flex flex-col w-96 h-72 row-start-3">
-                        <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Languages</CardTitle> {/* TODO: make official languages bold and make a note of this with a question mark tooltip*/}
+                        <CardHeader>
+                            <CardTitle className="font-extrabold text-xl" >Official Languages</CardTitle>
+                            {/* Tooltip for the title */}
                         </CardHeader>
                         <CardContent>
-                            <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language"/>
+                            <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language" />
                         </CardContent>
                     </Card>
                     <Button

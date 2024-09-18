@@ -23,7 +23,7 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey
         data={chartData}
         layout="vertical"
         margin={{
-          right: 16,
+          right: 40,
         }}
       >
         <CartesianGrid horizontal={false} />
@@ -60,7 +60,7 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey
             offset={8}
             className="fill-foreground"
             fontSize={12}
-            formatter={(value: number) => new Intl.NumberFormat('en', { style: "percent", minimumFractionDigits:1 }).format(value/100)} // TODO: render fractional percentages better
+            formatter={(value: number) => new Intl.NumberFormat('en', { style: "percent", minimumFractionDigits: 1 }).format(value / 100)} // TODO: render fractional percentages better
           />
         </Bar>
       </BarChart>
