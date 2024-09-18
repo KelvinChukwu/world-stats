@@ -44,7 +44,7 @@ export function WorldStatsBarChart<TData>({ chartData, chartConfig, xAxisDataKey
         <Bar
           dataKey={xAxisDataKey}
           layout="vertical"
-          fill="var(--color-desktop)"
+          fill={`var(--color-${yAxisDataKey})`}
           radius={4}
         >
           <LabelList

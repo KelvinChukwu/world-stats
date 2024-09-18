@@ -19,24 +19,15 @@ import { Separator } from "@/components/ui/separator"
 import { WorldStatsBarChart } from "./WorldStatsBarChart"
 import { ChartConfig } from "@/components/ui/chart"
 
-const chartData = [
-    { month: "January", desktop: 90, mobile: 80 },
-    { month: "February", desktop: 40, mobile: 200 },
-    { month: "March", desktop: 0.2, mobile: 120 },
-    { month: "April", desktop: 10, mobile: 190 },
-    { month: "May", desktop: 11, mobile: 130 },
-    { month: "June", desktop: 0.9, mobile: 140 },
-]
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    language: {
+        label: "Language",
         color: "hsl(var(--chart-2))",
     },
     label: {
         color: "hsl(var(--background))",
     },
 } satisfies ChartConfig
-
 
 
 const DEFAULT_PAGE = 1
