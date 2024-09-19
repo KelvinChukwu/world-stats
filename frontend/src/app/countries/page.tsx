@@ -37,12 +37,13 @@ type CountryResponse = {
 }
 
 
-async function getCountries(page?: number): Promise<CountryResponse> {
+async function getCountries(searchParams?: SearchParams): Promise<CountryResponse> {
+  const page = searchParams?.page ?? DEFAULT_PAGE
   const pageSize = DEFAULT_PAGE_SIZE
-  const searchParams = new URLSearchParams()
-  searchParams.set('page', page?.toString() ?? DEFAULT_PAGE.toString())
-  searchParams.set('page_size', pageSize.toString())
-  const res = await fetch(`http://127.0.0.1:5000/countries/?${searchParams.toString()}`)
+  const apiSearchParams = new URLSearchParams()
+  apiSearchParams.set('page', page?.toString() ?? DEFAULT_PAGE.toString())
+  apiSearchParams.set('page_size', pageSize.toString())
+  const res = await fetch(`http://127.0.0.1:5000/countries/?${apiSearchParams.toString()}`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch data')
@@ -74,10 +75,15 @@ async function getCountries(page?: number): Promise<CountryResponse> {
   }
 }
 
+type SearchParams = {
+  page?: number
+  name_contains?: string
+}
+
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
 export default async function Countries({ searchParams }: { searchParams?: { page?: number, name_contains?: string } }) {
-  const countriesPagination = await getCountries(searchParams?.page)
+  const countriesPagination = await getCountries(searchParams)
 
   return (
     <main>
