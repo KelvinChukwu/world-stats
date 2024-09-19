@@ -23,7 +23,7 @@ export default function WorldStatsCountryPageBackButton({className}: {className?
             className={className}
             onClick={handleGoBack}
         >
-            Go Back
+            Back to search results
         </Button>
     )
 }
