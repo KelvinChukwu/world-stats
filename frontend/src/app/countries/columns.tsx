@@ -17,6 +17,7 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "name",
         header: "Name",
+        filterFn: 'includesString',
         cell: ({ row }) => {
             const name = String(row.getValue("name"))
             const countryCode = row.id

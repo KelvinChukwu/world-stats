@@ -2,6 +2,7 @@
 
 import {
     ColumnDef,
+    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -22,7 +23,7 @@ import { XPagination } from "./page"
 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -53,10 +54,12 @@ export function DataTable<TData extends { id: string }, TValue>({
             pagination,
         },
         onPaginationChange: setPagination,
+        manualFiltering: true,
     })
 
     const pathName = usePathname()
     const router = useRouter()
+    const searchParams = useSearchParams()
 
     return (
         <div>
@@ -110,7 +113,9 @@ export function DataTable<TData extends { id: string }, TValue>({
                     size="sm"
                     onClick={() => {
                         table.previousPage()
-                        router.push(`${pathName}?page=${pagination.pageIndex}`)
+                        const newSearchParams = new URLSearchParams(searchParams.toString())
+                        newSearchParams.set('page', (pagination.pageIndex).toString())
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
                     }
                     }
                     disabled={!table.getCanPreviousPage()}
@@ -122,7 +127,9 @@ export function DataTable<TData extends { id: string }, TValue>({
                     size="sm"
                     onClick={() => {
                         table.nextPage()
-                        router.push(`${pathName}?page=${pagination.pageIndex + 2}`) 
+                        const newSearchParams = new URLSearchParams(searchParams.toString())
+                        newSearchParams.set('page', (pagination.pageIndex + 2).toString())
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
                     }
                     }
                     disabled={!table.getCanNextPage()}
