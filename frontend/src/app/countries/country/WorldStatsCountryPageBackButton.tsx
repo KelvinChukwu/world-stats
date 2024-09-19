@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 
 
 // TODO: make this function use the previous page's query params (if available) to make the back button work
+// TODO use clsx to pass styling props
 export default function WorldStatsCountryPageBackButton({className}: {className?: string}) {
     const router = useRouter()
 
