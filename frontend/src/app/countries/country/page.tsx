@@ -22,6 +22,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { WorldStatsUpdateCountryDialogContent } from "./WorldStatsUpdateCountryDialogContent"
+import WorldStatsCountryPageBackButton from "./WorldStatsCountryPageBackButton"
 
 const chartConfig = {
     language: {
@@ -139,12 +140,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
             <div className="flex flex-col justify-between m-4 gap-4">
                 <h1 className="text-3xl font-semibold">{`${country.name} (${country.localName})`}</h1>
                 <div className="grid grid-cols-2 gap-8 self-center">
-                    <Button
-                        variant="outline"
-                        className="size-fit"
-                    >
-                        Go Back
-                    </Button>
+                    <WorldStatsCountryPageBackButton className="size-fit" />
                     {/*TODO: extract these cards into their own component*/}
                     <Card className="flex flex-col w-96 h-72 row-start-2">
                         <CardHeader className="">
