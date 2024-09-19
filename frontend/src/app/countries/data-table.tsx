@@ -51,8 +51,14 @@ export function DataTable<TData extends { id: string }, TValue>({
         pageSize: paginationProps?.pageSize ?? 15, // TODO perhaps refactor this to get constant from shared file
     })
 
+    const curSearchParams = useSearchParams()
+    const nameFilter = { id: 'name', value:'' }
+    if (curSearchParams.get('name_contains')) {
+        nameFilter.value = curSearchParams.get('name_contains') ?? ''
+    }
+
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        []
+        [nameFilter]
     )
 
     const table = useReactTable({
