@@ -43,6 +43,9 @@ async function getCountries(searchParams?: SearchParams): Promise<CountryRespons
   const apiSearchParams = new URLSearchParams()
   apiSearchParams.set('page', page?.toString() ?? DEFAULT_PAGE.toString())
   apiSearchParams.set('page_size', pageSize.toString())
+  if (searchParams?.name_contains) {
+    apiSearchParams.set('name_contains', searchParams.name_contains)
+  }
   const res = await fetch(`http://127.0.0.1:5000/countries/?${apiSearchParams.toString()}`)
 
   if (!res.ok) {
