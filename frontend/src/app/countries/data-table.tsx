@@ -99,7 +99,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                                                 )}
                                             {header.column.getCanFilter() ? (
                                                 <div>
-                                                    <Filter column={header.column} />
+                                                    <Filter column={header.column} resetPageIndex={() => {table.resetPageIndex()}} />
                                                 </div>
                                             ) : null}
                                         </TableHead>
@@ -166,7 +166,7 @@ export function DataTable<TData extends { id: string }, TValue>({
     )
 }
 
-function Filter({ column }: { column: Column<any, unknown> }) {
+function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, resetPageIndex: () => void }) {
     const columnFilterValue = column.getFilterValue()
     const { filterVariant } = column.columnDef.meta ?? {}
 
@@ -218,12 +218,13 @@ function Filter({ column }: { column: Column<any, unknown> }) {
             className="w-36 border shadow rounded"
             onChange={value => {
                 column.setFilterValue(value)
-                const newSearchParams = new URLSearchParams(searchParams.toString())
+                const newSearchParams = new URLSearchParams()
                 if (value === '') {
                     newSearchParams.delete('name_contains')
                 } else {
                     newSearchParams.set('name_contains', value.toString())
                 }
+                resetPageIndex()
                 router.push(`${pathName}?${newSearchParams.toString()}`)
             }
             }
