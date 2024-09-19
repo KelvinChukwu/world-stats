@@ -37,7 +37,8 @@ type CountryResponse = {
 }
 
 
-async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promise<CountryResponse> {
+async function getCountries(page?: number): Promise<CountryResponse> {
+  const pageSize = DEFAULT_PAGE_SIZE
   const searchParams = new URLSearchParams()
   searchParams.set('page', page?.toString() ?? DEFAULT_PAGE.toString())
   searchParams.set('page_size', pageSize.toString())
@@ -75,7 +76,7 @@ async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promis
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
-export default async function Countries({ searchParams }: { searchParams?: { page?: number } }) {
+export default async function Countries({ searchParams }: { searchParams?: { page?: number, name_contains?: string } }) {
   const countriesPagination = await getCountries(searchParams?.page)
 
   return (
