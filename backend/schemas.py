@@ -13,8 +13,14 @@ class CountrySchema(ma.SQLAlchemyAutoSchema):
     languages = fields.Nested("CountryLanguageSchema", many=True)
 
 class CountryQueryArgsSchema (ma.Schema):
-    name = fields.Str(allow_none=True)
+    name_contains = fields.Str(allow_none=True)
     continent = fields.Enum(Continent, allow_none=True) # TODO: make this a multi-select, if possible
+    population_min = fields.Int(allow_none=True)
+    population_max = fields.Int(allow_none=True)
+    life_expectancy_min = fields.Float(allow_none=True)
+    life_expectancy_max = fields.Float(allow_none=True)
+    surface_area_min = fields.Float(allow_none=True)
+    surface_area_max = fields.Float(allow_none=True)
 
 class CountryUpdateArgsSchema (ma.Schema):
     population = fields.Int(allow_none=True)

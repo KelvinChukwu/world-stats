@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 from dotenv import dotenv_values
 from flask_smorest import Api, Blueprint, abort, Page
 from sqlalchemy import select
-from models import db, City, Country
+from models import db, City, Country, Continent
 from schemas import CitySchema, CountryQueryArgsSchema, ma, CountrySchema, CityUpdateArgsSchema, CountryUpdateArgsSchema
 
 
@@ -56,9 +56,25 @@ class Countries(MethodView):
     @countries_blp.paginate()
     def get (self, queryArgs, pagination_parameters:Page):
         """List countries"""
-        countries_pagination = db.paginate(select(Country).order_by(Country.name),page=pagination_parameters.page, per_page=pagination_parameters.page_size)
+        search_query = select(Country).order_by(Country.name)
+        if "name_contains" in queryArgs:
+            search_query = search_query.where(Country.name.icontains(queryArgs.get("name_contains")))
+        if  "continent" in queryArgs:
+            search_query = search_query.where(Country.continent == queryArgs.get("continent").value)
+        if "population_min" in queryArgs:
+            search_query = search_query.where(Country.population >= queryArgs.get("population_min"))
+        if "population_max" in queryArgs:
+            search_query = search_query.where(Country.population <= queryArgs.get("population_max"))
+        if "life_expectancy_min" in queryArgs:
+            search_query = search_query.where(Country.life_expectancy >= queryArgs.get("life_expectancy_min"))
+        if "life_expectancy_max" in queryArgs:
+            search_query = search_query.where(Country.life_expectancy <= queryArgs.get("life_expectancy_max"))
+        if "surface_area_min" in queryArgs:
+            search_query = search_query.where(Country.surface_area >= queryArgs.get("surface_area_min"))
+        if  "surface_area_max" in queryArgs:
+            search_query = search_query.where(Country.surface_area <= queryArgs.get("surface_area_max"))
+        countries_pagination = db.paginate(search_query,page=pagination_parameters.page, per_page=pagination_parameters.page_size)
         pagination_parameters.item_count = countries_pagination.total
-        print(pagination_parameters)
         return countries_pagination.items
      
 @countries_blp.route("/<country_code>")
