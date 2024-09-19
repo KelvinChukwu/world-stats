@@ -32,10 +32,13 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "continent",
         header: "Continent",
+        enableColumnFilter: false,
+        
     },
     {
         accessorKey: "population",
         header: "Population",
+        enableColumnFilter: false,
         cell: ({ row }) => {
             const population = parseInt(row.getValue("population"))
             const formatted = population.toLocaleString("en-US")
@@ -45,6 +48,7 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "surfaceArea",
         header: "Surface Area",
+        enableColumnFilter: false,
         cell: ({ row }) => {
             const surfaceArea = parseInt(row.getValue("surfaceArea"))
             const formatted = `${surfaceArea.toLocaleString()} km²` // TODO: consider extracting these formatting fcts to shared utils file
@@ -54,6 +58,7 @@ export const columns: ColumnDef<Country>[] = [
     {
         accessorKey: "lifeExpectancy",
         header: "Life Expectancy",
+        enableColumnFilter: false,
         cell: ({ row }) => {
             const lifeExpectancy = parseFloat(row.getValue("lifeExpectancy"))
             const formatted = lifeExpectancy ? `${lifeExpectancy} years` : '-' 

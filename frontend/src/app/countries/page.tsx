@@ -38,8 +38,10 @@ type CountryResponse = {
 
 
 async function getCountries(page?: number, pageSize = DEFAULT_PAGE_SIZE): Promise<CountryResponse> {
-  // TODO: use URL search params
-  const res = await fetch(`http://127.0.0.1:5000/countries/?page=${page ?? DEFAULT_PAGE}&page_size=${pageSize}`)
+  const searchParams = new URLSearchParams()
+  searchParams.set('page', page?.toString() ?? DEFAULT_PAGE.toString())
+  searchParams.set('page_size', pageSize.toString())
+  const res = await fetch(`http://127.0.0.1:5000/countries/?${searchParams.toString()}`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch data')
