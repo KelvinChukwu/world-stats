@@ -16,6 +16,7 @@ app = Flask(__name__)
 class APIConfig:
     MYSQL_HOST = 'localhost'
     MYSQL_USER = 'root'
+    DATABASE_URI = secrets["DATABASE_URI"]
     MYSQL_PASSWORD = secrets["MYSQL_PASSWORD"]
     MYSQL_DB = 'world'
     MYSQL_CURSORCLASS = 'DictCursor'
@@ -25,7 +26,7 @@ class APIConfig:
     OPENAPI_URL_PREFIX = "/"
     OPENAPI_SWAGGER_UI_PATH = '/docs'
     OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
-    SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
+    SQLALCHEMY_DATABASE_URI = f"{DATABASE_URI}"
     
 
 app.config.from_object(APIConfig)
