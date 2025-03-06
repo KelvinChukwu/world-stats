@@ -27,6 +27,9 @@ class APIConfig:
     OPENAPI_SWAGGER_UI_PATH = '/docs'
     OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
     SQLALCHEMY_DATABASE_URI = f"{DATABASE_URI}"
+    SQLALCHEMY_ENGINE_OPTIONS = {
+    'pool_recycle': 295
+    }
     
 
 app.config.from_object(APIConfig)
