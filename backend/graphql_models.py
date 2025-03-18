@@ -78,6 +78,14 @@ class City(SQLAlchemyObjectType):
         # only_fields = ("name",)
         # use `exclude_fields` to exclude specific fields ie "last_name"
         # exclude_fields = ("last_name",)
+
+class CountryLanguage(SQLAlchemyObjectType):
+    class Meta:
+        model = CountryLanguageModel
+        # use `only_fields` to only expose specific fields ie "name"
+        # only_fields = ("name",)
+        # use `exclude_fields` to exclude specific fields ie "last_name"
+        # exclude_fields = ("last_name",)
   
 
 class Query(graphene.ObjectType):
