@@ -7,7 +7,7 @@ from sqlalchemy import String, ForeignKey, Enum
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
 import graphene
-from graphene_sqlalchemy import SQLAlchemyObjectType
+from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from graphene_sqlalchemy.types import ORMField
 
 db = SQLAlchemy()
@@ -66,6 +66,7 @@ class CountryLanguageModel (db.Model):
 class Country(SQLAlchemyObjectType):
     class Meta:
         model = CountryModel
+        interfaces = (graphene.relay.Node,)
         # use `only_fields` to only expose specific fields ie "name"
         # only_fields = ("name",)
         # use `exclude_fields` to exclude specific fields ie "last_name"
@@ -74,6 +75,7 @@ class Country(SQLAlchemyObjectType):
 class City(SQLAlchemyObjectType):
     class Meta:
         model = CityModel
+        interfaces = (graphene.relay.Node,)
         # use `only_fields` to only expose specific fields ie "name"
         # only_fields = ("name",)
         # use `exclude_fields` to exclude specific fields ie "last_name"
@@ -82,6 +84,7 @@ class City(SQLAlchemyObjectType):
 class CountryLanguage(SQLAlchemyObjectType):
     class Meta:
         model = CountryLanguageModel
+        interfaces = (graphene.relay.Node,)
         # use `only_fields` to only expose specific fields ie "name"
         # only_fields = ("name",)
         # use `exclude_fields` to exclude specific fields ie "last_name"
@@ -89,15 +92,24 @@ class CountryLanguage(SQLAlchemyObjectType):
   
 
 class Query(graphene.ObjectType):
-    countries = graphene.List(Country)
+    node = graphene.relay.Node.Field()
+    countries = SQLAlchemyConnectionField(Country.connection)
     # cities  = graphene.List(City)
 
-    def resolve_countries(self, info):
+    def resolve_countries(parent, info, **kwargs):
         query = Country.get_query(info)
+        if kwargs.get("filter"):
+            filter = kwargs.get("filter")
+            print(filter)
+            if "name" in filter:
+                name_filter = filter["name"]
+                print(name_filter)
+                if "eq" in name_filter:
+                    print (name_filter["eq"])
+                    query = query.where(CountryModel.name == name_filter["eq"])
+
+
         return query.all()
-"""     def resolve_cities(self, info):
-        query = City.get_query(info)
-        return query.all() """
 
 schema = graphene.Schema(query=Query)
 
