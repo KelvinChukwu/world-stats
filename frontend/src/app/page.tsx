@@ -57,7 +57,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
       </nav>
 
       <div className="flex flex-col items-center justify-between p-24 border-2 border-red-500 m-20">
-        Foobar
+        World Stats
       </div>
     </main>
   );
