@@ -20,30 +20,10 @@ import { WorldStatsNav } from "./world-stats-nav"
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGE_SIZE = 10
 
-// TODO: Make this a landing page
-
-async function getCountries(page?: number, pageSize?: number) {
-  console.log("Page num: ", page)
-  const res = await fetch(`http://127.0.0.1:5000/countries/?page=${page ?? DEFAULT_PAGE}&page_size=${pageSize ?? DEFAULT_PAGE_SIZE}`)
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
-  console.log(res.headers.get('x-pagination'))
-
-  return res.json()
-}
-
 export default async function Home({ searchParams }: { searchParams?: { page?: number } }) {
-  const countries = await getCountries(searchParams?.page)
-  //console.log(countries)
-
   return (
     <div className="flex min-h-screen flex-col">
-      <WorldStatsNav/>
+      <WorldStatsNav />
       <main>
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
