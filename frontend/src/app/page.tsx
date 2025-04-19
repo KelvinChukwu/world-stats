@@ -50,6 +50,11 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
           <nav>
             <NavigationMenu>
               <NavigationMenuList>
+              <NavigationMenuItem>
+                  <Link href="/" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Link href="countries" legacyBehavior passHref>
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
@@ -98,7 +103,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
                 </ul>
               </CardContent>
               <CardFooter className="mt-auto">
-                <Button className="w-full">Admin Login</Button>
+                <Button className="w-full" asChild><Link href="#">Admin Login</Link></Button>
               </CardFooter>
             </Card>
             <Card className="flex flex-col">
@@ -114,7 +119,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
                   Browse detailed information about countries, including demographics, geography, economy, and culture.
                 </p>
                 <ul className="grid gap-3 text-sm">
-                <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2">
                     • <span>View List of Countries</span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -123,7 +128,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
                 </ul>
               </CardContent>
               <CardFooter className="mt-auto">
-                <Button className="w-full">Explore Countries</Button>
+                <Button className="w-full" asChild><Link href="countries" >Explore Countries</Link></Button>
               </CardFooter>
             </Card>
           </div>
