@@ -16,6 +16,7 @@ flask-sqlacodegen = "^2.0.0"
 flask-marshmallow = "^1.2.1"
 marshmallow-sqlalchemy = "^1.0.0"
 psycopg2 = "^2.9.10"
+flask-login = "^0.6.3"
 
 
 [build-system]
