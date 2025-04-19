@@ -66,7 +66,7 @@ export function WorldStatsNav() {
                                 </Link>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <Link href="#" legacyBehavior passHref>
+                                <Link href="/login" legacyBehavior passHref>
                                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>Admin Login</NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>

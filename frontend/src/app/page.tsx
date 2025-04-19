@@ -57,7 +57,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
                 </ul>
               </CardContent>
               <CardFooter className="mt-auto">
-                <Button className="w-full" asChild><Link href="#">Admin Login</Link></Button>
+                <Button className="w-full" asChild><Link href="/login">Admin Login</Link></Button>
               </CardFooter>
             </Card>
             <Card className="flex flex-col">
