@@ -8,6 +8,7 @@ from models import db, City, Country, Continent
 from schemas import (
     CitySchema,
     CountryQueryArgsSchema,
+    LoginArgsSchema,
     ma,
     CountrySchema,
     CityUpdateArgsSchema,
@@ -81,7 +82,7 @@ city_schema = CitySchema()
 cities_schema = CitySchema(many=True)
 
 # Our mock database.
-users = {"student@ryerson.ca": {"password": "secret"}}
+users = {"admin@worldstats.ca": {"password": "world"}}
 
 
 # User class
@@ -122,9 +123,10 @@ def hello_world():
 
 
 # Login route that is used to access secure routes.
-@auth_blp.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "GET":
+@auth_blp.route("/login")
+class Login(MethodView):
+    def get(self):
+        """Primitive Login"""
         return """
         <form action='login' method='POST'>
         username &nbsp;<input type='text' name='email'
@@ -135,14 +137,17 @@ def login():
         <input type='submit' name='submit'/>
         </form>
         """
-    email = request.form["email"]
-    if email in users and request.form["password"] == users[email]["password"]:
-        user = User()
-        user.id = email
-        login_user(user)
-        return redirect(url_for("protected"))
-    return "Incorrect login"
 
+    @auth_blp.arguments(LoginArgsSchema, location="form", content_type="application/x-www-form-urlencoded")
+    def post(self, form_data):
+        """Login via POST""" 
+        email = form_data["email"]
+        if email in users and form_data["password"] == users[email]["password"]:
+            user = User()
+            user.id = email
+            login_user(user)
+            return redirect(url_for("protected"))
+        return "Incorrect login"
 
 # Protected route hence user must be logged in to access it.
 @app.route("/protected")
