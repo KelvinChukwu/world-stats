@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, request, url_for
 from flask.views import MethodView
 from flask_mysqldb import MySQL
 from dotenv import dotenv_values
@@ -49,7 +49,7 @@ class APIConfig:
 app.config.from_object(APIConfig)
 mysql = MySQL(app)
 api = Api(app)
-app.secret_key = "super secret string"  # Required for authentication
+app.secret_key = "super secret string"  # Required for authentication TODO MAKE THIS MORE SECURE
 login_manager = LoginManager()
 
 db.init_app(app)
@@ -64,6 +64,13 @@ countries_blp = Blueprint(
 )
 cities_blp = Blueprint(
     "cities", "cities", url_prefix="/cities", description="Operations on cities"
+)
+
+auth_blp = Blueprint(
+    "auth",
+    "auth",
+    url_prefix="/auth",
+    description="Authentication operations",
 )
 
 countries_schema = CountrySchema(many=True)
@@ -102,10 +109,52 @@ def request_loader(request):
     return user
 
 
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return "Unauthorized", 401
+
+
 # Routes
 @app.route("/")
 def hello_world():
     return "Hello, World!"
+
+
+# Login route that is used to access secure routes.
+@auth_blp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return """
+        <form action='login' method='POST'>
+        username &nbsp;<input type='text' name='email'
+        id='email' placeholder='email'/> <br /> &nbsp; <br />
+        password &nbsp;<input type='password'
+        name='password' id='password' placeholder='password'/> <br /> &nbsp;
+        <br />
+        <input type='submit' name='submit'/>
+        </form>
+        """
+    email = request.form["email"]
+    if email in users and request.form["password"] == users[email]["password"]:
+        user = User()
+        user.id = email
+        login_user(user)
+        return redirect(url_for("protected"))
+    return "Incorrect login"
+
+
+# Protected route hence user must be logged in to access it.
+@app.route("/protected")
+@login_required
+def protected():
+    return "Logged in as: " + current_user.id
+
+
+# Logout from current session
+@auth_blp.route("/logout")
+def logout():
+    logout_user()
+    return "Logged out"
 
 
 @countries_blp.route("/")
@@ -232,6 +281,7 @@ class CitiesByCode(MethodView):
 
 api.register_blueprint(countries_blp)
 api.register_blueprint(cities_blp)
+api.register_blueprint(auth_blp)
 
 # Run
 if __name__ == "__main__":
