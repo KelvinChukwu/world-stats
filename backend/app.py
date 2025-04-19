@@ -44,6 +44,7 @@ class APIConfig:
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     SQLALCHEMY_DATABASE_URI = f"{DATABASE_URI}"
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_recycle": 295}
+    # LOGIN_DISABLED = True # TODO: Remove this when ready to deploy
 
 
 app.config.from_object(APIConfig)
@@ -151,7 +152,7 @@ def protected():
 
 
 # Logout from current session
-@auth_blp.route("/logout")
+@auth_blp.route("/logout", methods=["POST"])
 def logout():
     logout_user()
     return "Logged out"
