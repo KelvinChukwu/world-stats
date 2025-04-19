@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { WorldStatsUpdateCountryDialogContent } from "./WorldStatsUpdateCountryDialogContent"
 import WorldStatsCountryPageBackButton from "./WorldStatsCountryPageBackButton"
+import { WorldStatsNav } from "@/app/world-stats-nav"
 
 const chartConfig = {
     language: {
@@ -117,82 +118,70 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
     })).filter(language => language.isOfficial)
 
     return (
-        <main>
-            <nav>
-                <NavigationMenu>
-                    <NavigationMenuList>
-                        <NavigationMenuItem>
-                            <Link href="/countries" legacyBehavior passHref>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <Link href="#" legacyBehavior passHref>
-                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Cities</NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
-            </nav>
+        <div>
+            <WorldStatsNav />
+            <main>
 
-            <Separator />
 
-            <div className="flex flex-col justify-between m-4 gap-4">
-                <h1 className="text-3xl font-semibold">{`${country.name} (${country.localName})`}</h1>
-                <div className="grid grid-cols-2 gap-8 self-center">
-                    <WorldStatsCountryPageBackButton className="size-fit" />
-                    {/*TODO: extract these cards into their own component*/}
-                    <Card className="flex flex-col w-96 h-72 row-start-2">
-                        <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Geography</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-2 justify-self-center grow">
-                            <TextPair label="Continent" value={country.continent} />
-                            <TextPair label="Region" value={country.region} />
-                            <TextPair label="Surface Area" value={`${country.surfaceArea.toLocaleString()} km²`} />
-                            <TextPair label="Capital" value={country?.capital ?? '-'} />
-                        </CardContent>
-                    </Card>
-                    <Card className="flex flex-col  w-96 h-72 row-start-2">
-                        <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Demographics</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-rows-2 grow">
-                            <TextPair label="Population" value={country.population.toLocaleString()} />
-                            <TextPair label="Life Expectancy" value={country.lifeExpectancy ? `${country?.lifeExpectancy} years` : '-'} />
-                        </CardContent>
-                    </Card>
-                    <Card className="flex flex-col  w-96 h-72 row-start-3">
-                        <CardHeader className="">
-                            <CardTitle className="font-extrabold text-xl" >Politics</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-rows-2 gap-2 grow">
-                            <TextPair label="Independence Year" value={(country?.independenceYear ? country?.independenceYear.toString() : '-')} />
-                            <TextPair label="Government Form" value={country.governmentForm} />
-                            <TextPair label="Head of State" value={country.headOfState ?? '-'} />
-                        </CardContent>
-                    </Card>
-                    <Card className="flex flex-col w-96 h-72 row-start-3">
-                        <CardHeader>
-                            <CardTitle className="font-extrabold text-xl" >Official Languages</CardTitle>
-                            {/* Tooltip for the title */}
-                        </CardHeader>
-                        <CardContent>
-                            <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language" />
-                        </CardContent>
-                    </Card>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button
-                                className="size-fit row-start-4 col-start-2 justify-self-end"
-                            >
-                                Edit
-                            </Button>
-                        </DialogTrigger>
-                        <WorldStatsUpdateCountryDialogContent />
-                    </Dialog>
+                <Separator />
+
+                <div className="flex flex-col justify-between m-4 gap-4">
+                    <h1 className="text-3xl font-semibold">{`${country.name} (${country.localName})`}</h1>
+                    <div className="grid grid-cols-2 gap-8 self-center">
+                        <WorldStatsCountryPageBackButton className="size-fit" />
+                        {/*TODO: extract these cards into their own component*/}
+                        <Card className="flex flex-col w-96 h-72 row-start-2">
+                            <CardHeader className="">
+                                <CardTitle className="font-extrabold text-xl" >Geography</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid grid-cols-2 gap-2 justify-self-center grow">
+                                <TextPair label="Continent" value={country.continent} />
+                                <TextPair label="Region" value={country.region} />
+                                <TextPair label="Surface Area" value={`${country.surfaceArea.toLocaleString()} km²`} />
+                                <TextPair label="Capital" value={country?.capital ?? '-'} />
+                            </CardContent>
+                        </Card>
+                        <Card className="flex flex-col  w-96 h-72 row-start-2">
+                            <CardHeader className="">
+                                <CardTitle className="font-extrabold text-xl" >Demographics</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid grid-rows-2 grow">
+                                <TextPair label="Population" value={country.population.toLocaleString()} />
+                                <TextPair label="Life Expectancy" value={country.lifeExpectancy ? `${country?.lifeExpectancy} years` : '-'} />
+                            </CardContent>
+                        </Card>
+                        <Card className="flex flex-col  w-96 h-72 row-start-3">
+                            <CardHeader className="">
+                                <CardTitle className="font-extrabold text-xl" >Politics</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid grid-rows-2 gap-2 grow">
+                                <TextPair label="Independence Year" value={(country?.independenceYear ? country?.independenceYear.toString() : '-')} />
+                                <TextPair label="Government Form" value={country.governmentForm} />
+                                <TextPair label="Head of State" value={country.headOfState ?? '-'} />
+                            </CardContent>
+                        </Card>
+                        <Card className="flex flex-col w-96 h-72 row-start-3">
+                            <CardHeader>
+                                <CardTitle className="font-extrabold text-xl" >Official Languages</CardTitle>
+                                {/* Tooltip for the title */}
+                            </CardHeader>
+                            <CardContent>
+                                <WorldStatsBarChart chartConfig={chartConfig} chartData={countryLanguageData} xAxisDataKey="percentage" yAxisDataKey="language" />
+                            </CardContent>
+                        </Card>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button
+                                    className="size-fit row-start-4 col-start-2 justify-self-end"
+                                >
+                                    Edit
+                                </Button>
+                            </DialogTrigger>
+                            <WorldStatsUpdateCountryDialogContent />
+                        </Dialog>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     );
 }

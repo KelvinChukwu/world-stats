@@ -15,6 +15,7 @@ import { DataTable } from "./data-table"
 
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { WorldStatsNav } from "../world-stats-nav"
 
 
 const DEFAULT_PAGE = 1
@@ -89,27 +90,13 @@ export default async function Countries({ searchParams }: { searchParams?: { pag
   const countriesPagination = await getCountries(searchParams)
 
   return (
-    <main>
-      <nav>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="/countries" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="#" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Cities</NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </nav>
-
-      <div className="flex flex-col items-center justify-between m-20">
-        <DataTable columns={columns} data={countriesPagination.countries} paginationProps={countriesPagination.pagination} />
-      </div>
-    </main>
+    <div>
+      <WorldStatsNav />
+      <main>
+        <div className="flex flex-col items-center justify-between m-20">
+          <DataTable columns={columns} data={countriesPagination.countries} paginationProps={countriesPagination.pagination} />
+        </div>
+      </main>
+    </div>
   );
 }

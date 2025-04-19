@@ -14,6 +14,7 @@ import {
 import Link from "next/link"
 import { Globe, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { WorldStatsNav } from "./world-stats-nav"
 
 
 const DEFAULT_PAGE = 1
@@ -42,34 +43,7 @@ export default async function Home({ searchParams }: { searchParams?: { page?: n
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">World Stats</span>
-          </div>
-          <nav>
-            <NavigationMenu>
-              <NavigationMenuList>
-              <NavigationMenuItem>
-                  <Link href="/" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="countries" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="#" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Admin Login</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </nav>
-        </div>
-      </header>
+      <WorldStatsNav/>
       <main>
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
