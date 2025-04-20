@@ -1,20 +1,5 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-
 import { Country, columns } from "./columns"
 import { DataTable } from "./data-table"
-
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import { WorldStatsNav } from "../world-stats-nav"
 
 

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 import Link from "next/link"
-import { Globe, Lock } from "lucide-react"
+import { Globe} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WorldStatsNav } from "./world-stats-nav"
 

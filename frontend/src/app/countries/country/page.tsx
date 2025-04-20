@@ -1,26 +1,9 @@
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    NavigationMenuViewport,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-
-import Link from "next/link"
-import { redirect } from "next/navigation"
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { WorldStatsBarChart } from "./WorldStatsBarChart"
 import { ChartConfig } from "@/components/ui/chart"
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { WorldStatsUpdateCountryDialogContent } from "./WorldStatsUpdateCountryDialogContent"
 import WorldStatsCountryPageBackButton from "./WorldStatsCountryPageBackButton"
 import { WorldStatsNav } from "@/app/world-stats-nav"
