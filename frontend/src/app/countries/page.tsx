@@ -32,6 +32,24 @@ async function getCountries(searchParams?: SearchParams): Promise<CountryRespons
   if (searchParams?.name_contains) {
     apiSearchParams.set('name_contains', searchParams.name_contains)
   }
+  if (searchParams?.population_min) {
+    apiSearchParams.set('population_min', searchParams.population_min.toString())
+  }
+  if (searchParams?.population_max) {
+    apiSearchParams.set('population_max', searchParams.population_max.toString())
+  }
+  if (searchParams?.surface_area_min) {
+    apiSearchParams.set('surface_area_min', searchParams.surface_area_min.toString())
+  }
+  if (searchParams?.surface_area_max) {
+    apiSearchParams.set('surface_area_max', searchParams.surface_area_max.toString())
+  }
+  if (searchParams?.life_expectancy_min) {
+    apiSearchParams.set('life_expectancy_min', searchParams.life_expectancy_min.toString())
+  }
+  if (searchParams?.life_expectancy_max) {
+    apiSearchParams.set('life_expectancy_max', searchParams.life_expectancy_max.toString())
+  }
   const res = await fetch(`http://127.0.0.1:5000/countries/?${apiSearchParams.toString()}`)
 
   if (!res.ok) {
@@ -67,11 +85,30 @@ async function getCountries(searchParams?: SearchParams): Promise<CountryRespons
 type SearchParams = {
   page?: number
   name_contains?: string
+  population_min?: number
+  population_max?: number
+  surface_area_min?: number
+  surface_area_max?: number
+  life_expectancy_min?: number
+  life_expectancy_max?: number
 }
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
-export default async function Countries({ searchParams }: { searchParams?: { page?: number, name_contains?: string } }) {
+export default async function Countries({ searchParams }:
+  {
+    searchParams?:
+    {
+      page?: number,
+      name_contains?: string,
+      population_min?: number,
+      population_max?: number,
+      surface_area_min?: number,
+      surface_area_max?: number,
+      life_expectancy_min?: number,
+      life_expectancy_max?: number
+    }
+  }) {
   const countriesPagination = await getCountries(searchParams)
 
   return (

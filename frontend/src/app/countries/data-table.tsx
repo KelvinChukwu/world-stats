@@ -235,6 +235,7 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
                         }
                         // TODO: fix behaviour that resets the page index on back navigation
                         resetPageIndex()
+                        newSearchParams.delete('page')
                         router.push(`${pathName}?${newSearchParams.toString()}`)
                     }
                     }
@@ -263,6 +264,7 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
                         }
                         // TODO: fix behaviour that resets the page index on back navigation
                         resetPageIndex()
+                        newSearchParams.delete('page')
                         router.push(`${pathName}?${newSearchParams.toString()}`)
                     }
                     }
@@ -301,6 +303,7 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
                 }
                 // TODO: fix behaviour that resets the page index on back navigation
                 resetPageIndex()
+                newSearchParams.delete('page')
                 router.push(`${pathName}?${newSearchParams.toString()}`)
             }
             }
