@@ -247,6 +247,23 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
                     value={(columnFilterValue as [number, number])?.[1] ?? ''}
                     onChange={value => {
                         column.setFilterValue((old: [number, number]) => [old?.[0], value])
+                        let filterName = ""
+                        if (column.id === 'population') {
+                            filterName = 'population_max'
+                        } else if (column.id === 'surfaceArea') {
+                            filterName = 'surface_area_max'
+                        }
+                        else {
+                            filterName = "life_expectancy_max"
+                        }
+
+                        const newSearchParams = createSearchParams(filterName, value.toString())
+                        if (value === '') {
+                            newSearchParams.delete(filterName)
+                        }
+                        // TODO: fix behaviour that resets the page index on back navigation
+                        resetPageIndex()
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
                     }
                     }
                     placeholder={`Max`}
