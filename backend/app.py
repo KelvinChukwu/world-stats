@@ -227,7 +227,6 @@ class CountriesByCode(MethodView):
 
     @cities_blp.arguments(CountryUpdateArgsSchema)
     @cities_blp.response(200, country_schema)
-    @login_required
     def patch(self, update_data, country_code):
         """Update existing country"""
         country = db.session.execute(
@@ -276,7 +275,6 @@ class CitiesByCode(MethodView):
 
     @cities_blp.arguments(CityUpdateArgsSchema)
     @cities_blp.response(200, city_schema)
-    @login_required
     def patch(self, update_data, id: int):
         """Update existing city"""
         city = db.session.execute(select(City).filter_by(id=id)).scalar()
