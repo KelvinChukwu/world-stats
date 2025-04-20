@@ -66,7 +66,7 @@ export const columns: ColumnDef<Country>[] = [
         cell: ({ row }) => {
             const lifeExpectancy = parseFloat(row.getValue("lifeExpectancy"))
             const formatted = lifeExpectancy ? `${lifeExpectancy} years` : '-'
-            return <p className="text-center">{formatted}</p>
+            return <p>{formatted}</p>
         }
     },
 ]
