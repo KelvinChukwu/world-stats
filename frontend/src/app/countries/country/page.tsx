@@ -89,6 +89,7 @@ function TextPair({ label, value }: { label: string; value: string }) {
 
 // TODO: make the table a fixed size (or at least all the column widths)
 // TODO if the field value is empty, show a dash
+//TODO: USE URLSEARCHPARAMS TO GET THE PREVIOUS PAGE'S SEARCH RESULTS, IF THEY EXIST, FOR USE WITH BACK BUTTON
 export default async function CountryDetailedPage({ searchParams }: { searchParams: { countryCode: string } }) {
     const countryCode = searchParams?.countryCode
     const country = await getCountry(countryCode)

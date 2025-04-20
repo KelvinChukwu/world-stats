@@ -53,12 +53,17 @@ export function DataTable<TData extends { id: string }, TValue>({
 
     const curSearchParams = useSearchParams()
     const nameFilter = { id: 'name', value:'' }
+    const continentFilter = { id: 'continent', value:'' }
+    const populationFilter = { id: 'population', value:'' }
+    const surfaceAreaFilter = { id: 'surfaceArea', value:'' }
+    const lifeExpectancyFilter = { id: 'lifeExpectancy', value:'' }
+
     if (curSearchParams.get('name_contains')) {
         nameFilter.value = curSearchParams.get('name_contains') ?? ''
     }
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        [nameFilter]
+        [nameFilter, continentFilter, populationFilter, surfaceAreaFilter, lifeExpectancyFilter]
     )
 
     const table = useReactTable({
@@ -209,9 +214,13 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
         >
             {/* See faceted column filters example for dynamic select options */}
             <option value="">All</option>
-            <option value="complicated">complicated</option>
-            <option value="relationship">relationship</option>
-            <option value="single">single</option>
+            <option value="ASIA">Asia</option>
+            <option value="EUROPE">Europe</option>
+            <option value="NORTH AMERICA">North America</option>
+            <option value="SOUTH AMERICA">South America</option>
+            <option value="OCEANIA">Oceania</option>
+            <option value="AFRICA">Africa</option>
+            <option value="ANTARCTICA">Antarctica</option>
         </select>
     ) : (
         <DebouncedInput
@@ -224,6 +233,7 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
                 } else {
                     newSearchParams.set('name_contains', value.toString())
                 }
+                // TODO: fix behaviour that resets the page index on back navigation
                 resetPageIndex()
                 router.push(`${pathName}?${newSearchParams.toString()}`)
             }
