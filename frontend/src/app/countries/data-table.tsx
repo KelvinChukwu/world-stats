@@ -79,6 +79,9 @@ export function DataTable<TData extends { id: string }, TValue>({
     if (curSearchParams.get('life_expectancy_max')) {
         lifeExpectancyFilter.value[1] = curSearchParams.get('life_expectancy_max') ?? ''
     }
+    if (curSearchParams.get('continent')) {
+        continentFilter.value = curSearchParams.get('continent') ?? ''
+    }
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         [nameFilter, continentFilter, populationFilter, surfaceAreaFilter, lifeExpectancyFilter]
@@ -278,6 +281,16 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
         <select
             onChange={e => {
                 column.setFilterValue(e.target.value)
+                const newSearchParams = createSearchParams("continent", e.target.value.toString())
+                console.log(e.target.value)
+                if (e.target.value === '') {
+                    newSearchParams.delete('continent')
+                }
+                // TODO: fix behaviour that resets the page index on back navigation
+                resetPageIndex()
+                newSearchParams.delete('page')
+                router.push(`${pathName}?${newSearchParams.toString()}`)
+
             }
             }
             value={columnFilterValue?.toString()}
@@ -286,8 +299,8 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
             <option value="">All</option>
             <option value="ASIA">Asia</option>
             <option value="EUROPE">Europe</option>
-            <option value="NORTH AMERICA">North America</option>
-            <option value="SOUTH AMERICA">South America</option>
+            <option value="NORTH_AMERICA">North America</option>
+            <option value="SOUTH_AMERICA">South America</option>
             <option value="OCEANIA">Oceania</option>
             <option value="AFRICA">Africa</option>
             <option value="ANTARCTICA">Antarctica</option>

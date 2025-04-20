@@ -50,6 +50,9 @@ async function getCountries(searchParams?: SearchParams): Promise<CountryRespons
   if (searchParams?.life_expectancy_max) {
     apiSearchParams.set('life_expectancy_max', searchParams.life_expectancy_max.toString())
   }
+  if (searchParams?.continent) {
+    apiSearchParams.set('continent', searchParams.continent)
+  }
   const res = await fetch(`http://127.0.0.1:5000/countries/?${apiSearchParams.toString()}`)
 
   if (!res.ok) {
@@ -91,6 +94,7 @@ type SearchParams = {
   surface_area_max?: number
   life_expectancy_min?: number
   life_expectancy_max?: number
+  continent?: string
 }
 
 // TODO: make the table a fixed size (or at least all the column widths)
@@ -107,6 +111,7 @@ export default async function Countries({ searchParams }:
       surface_area_max?: number,
       life_expectancy_min?: number,
       life_expectancy_max?: number
+      continent?: string
     }
   }) {
   const countriesPagination = await getCountries(searchParams)
