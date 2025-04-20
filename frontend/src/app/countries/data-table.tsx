@@ -185,6 +185,7 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
                 {/* See faceted column filters example for min max values functionality */}
                 <DebouncedInput
                     type="number"
+                    min={0}
                     value={(columnFilterValue as [number, number])?.[0] ?? ''}
                     onChange={value =>
                         column.setFilterValue((old: [number, number]) => [value, old?.[1]])
@@ -194,6 +195,7 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
                 />
                 <DebouncedInput
                     type="number"
+                    min={0}
                     value={(columnFilterValue as [number, number])?.[1] ?? ''}
                     onChange={value =>
                         column.setFilterValue((old: [number, number]) => [old?.[0], value])
