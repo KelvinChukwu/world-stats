@@ -24,7 +24,7 @@ import {
 import { XPagination } from "./page"
 
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
@@ -52,14 +52,32 @@ export function DataTable<TData extends { id: string }, TValue>({
     })
 
     const curSearchParams = useSearchParams()
-    const nameFilter = { id: 'name', value:'' }
-    const continentFilter = { id: 'continent', value:'' }
-    const populationFilter = { id: 'population', value:'' }
-    const surfaceAreaFilter = { id: 'surfaceArea', value:'' }
-    const lifeExpectancyFilter = { id: 'lifeExpectancy', value:'' }
+    const nameFilter = { id: 'name', value: '' }
+    const continentFilter = { id: 'continent', value: '' }
+    const populationFilter = { id: 'population', value: ['', ''] }
+    const surfaceAreaFilter = { id: 'surfaceArea', value: ['', ''] }
+    const lifeExpectancyFilter = { id: 'lifeExpectancy', value: ['', ''] }
 
     if (curSearchParams.get('name_contains')) {
         nameFilter.value = curSearchParams.get('name_contains') ?? ''
+    }
+    if (curSearchParams.get('population_min')) {
+        populationFilter.value[0] = curSearchParams.get('population_min') ?? ''
+    }
+    if (curSearchParams.get('population_max')) {
+        populationFilter.value[1] = curSearchParams.get('population_max') ?? ''
+    }
+    if (curSearchParams.get('surface_area_min')) {
+        surfaceAreaFilter.value[0] = curSearchParams.get('surface_area_min') ?? ''
+    }
+    if (curSearchParams.get('surface_area_max')) {
+        surfaceAreaFilter.value[1] = curSearchParams.get('surface_area_max') ?? ''
+    }
+    if (curSearchParams.get('life_expectancy_min')) {
+        lifeExpectancyFilter.value[0] = curSearchParams.get('life_expectancy_min') ?? ''
+    }
+    if (curSearchParams.get('life_expectancy_max')) {
+        lifeExpectancyFilter.value[1] = curSearchParams.get('life_expectancy_max') ?? ''
     }
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -104,7 +122,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                                                 )}
                                             {header.column.getCanFilter() ? (
                                                 <div>
-                                                    <Filter column={header.column} resetPageIndex={() => {table.resetPageIndex()}} />
+                                                    <Filter column={header.column} resetPageIndex={() => { table.resetPageIndex() }} />
                                                 </div>
                                             ) : null}
                                         </TableHead>
@@ -171,13 +189,25 @@ export function DataTable<TData extends { id: string }, TValue>({
     )
 }
 
-function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, resetPageIndex: () => void }) {
+function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, resetPageIndex: () => void }) {
     const columnFilterValue = column.getFilterValue()
     const { filterVariant } = column.columnDef.meta ?? {}
 
     const pathName = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+
+    // Get a new searchParams string by merging the current
+    // searchParams with a provided key/value pair
+    const createSearchParams = useCallback(
+        (name: string, value: string) => {
+            const params = new URLSearchParams(searchParams.toString())
+            params.set(name, value)
+
+            return params
+        },
+        [searchParams]
+    )
 
     return filterVariant === 'range' ? (
         <div>
@@ -186,9 +216,27 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
                 <DebouncedInput
                     type="number"
                     min={0}
-                    value={(columnFilterValue as [number, number])?.[0] ?? ''}
-                    onChange={value =>
-                        column.setFilterValue((old: [number, number]) => [value, old?.[1]])
+                    value={(columnFilterValue as [number | string, number | string])?.[0] ?? ''}
+                    onChange={value => {
+                        column.setFilterValue((old: [number | string, number | string]) => [value, old?.[1]])
+                        let filterName = ""
+                        if (column.id === 'population') {
+                            filterName = 'population_min'
+                        } else if (column.id === 'surfaceArea') {
+                            filterName = 'surface_area_min'
+                        }
+                        else {
+                            filterName = "life_expectancy_min"
+                        }
+
+                        const newSearchParams = createSearchParams(filterName, value.toString())
+                        if (value === '') {
+                            newSearchParams.delete(filterName)
+                        }
+                        // TODO: fix behaviour that resets the page index on back navigation
+                        resetPageIndex()
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
+                    }
                     }
                     placeholder={`Min`}
                     className="w-24 border shadow rounded"
@@ -197,8 +245,9 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
                     type="number"
                     min={0}
                     value={(columnFilterValue as [number, number])?.[1] ?? ''}
-                    onChange={value =>
+                    onChange={value => {
                         column.setFilterValue((old: [number, number]) => [old?.[0], value])
+                    }
                     }
                     placeholder={`Max`}
                     className="w-24 border shadow rounded"
@@ -229,11 +278,9 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
             className="w-36 border shadow rounded"
             onChange={value => {
                 column.setFilterValue(value)
-                const newSearchParams = new URLSearchParams()
+                const newSearchParams = createSearchParams("name_contains", value.toString())
                 if (value === '') {
                     newSearchParams.delete('name_contains')
-                } else {
-                    newSearchParams.set('name_contains', value.toString())
                 }
                 // TODO: fix behaviour that resets the page index on back navigation
                 resetPageIndex()
