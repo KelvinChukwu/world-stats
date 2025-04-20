@@ -27,7 +27,7 @@ export function WorldStatsUpdateCountryDialogContent() {
       <DialogHeader>
         <DialogTitle>Edit Country</DialogTitle>
         <DialogDescription>
-          Make changes to a country's attributes here. Click "Save changes" to submit.
+          {`Make changes to a country's attributes here. Click "Save changes" to submit.`}
         </DialogDescription>
       </DialogHeader>
       <form action={updateCountryWithCountryCode}>
