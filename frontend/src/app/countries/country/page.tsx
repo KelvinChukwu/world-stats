@@ -112,7 +112,7 @@ export default async function CountryDetailedPage({ searchParams }: { searchPara
                 <div className="flex flex-col justify-between m-4 gap-4">
                     <h1 className="text-3xl font-semibold">{`${country.name} (${country.localName})`}</h1>
                     <div className="grid grid-cols-2 gap-8 self-center">
-                        <WorldStatsCountryPageBackButton className="size-fit" />
+                        {/* <WorldStatsCountryPageBackButton className="size-fit" /> */}
                         {/*TODO: extract these cards into their own component*/}
                         <Card className="flex flex-col w-96 h-72 row-start-2">
                             <CardHeader className="">

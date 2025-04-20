@@ -307,7 +307,7 @@ function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, rese
                 router.push(`${pathName}?${newSearchParams.toString()}`)
             }
             }
-            placeholder={`Search...`}
+            placeholder={`Name Contains...`}
             type="text"
             value={(columnFilterValue ?? '') as string}
         />
