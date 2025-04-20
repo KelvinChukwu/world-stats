@@ -22,25 +22,6 @@ function ListItem({
     )
 }
 
-function LoginItem() {
-    return (
-        <NavigationMenuItem>
-            <NavigationMenuTrigger>Logged In As</NavigationMenuTrigger>
-            <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4">
-
-                    <ListItem
-                        key={"logout"}
-                        title={"Logout"}
-                        href={"#"}
-                    >
-                    </ListItem>
-                </ul>
-            </NavigationMenuContent>
-        </NavigationMenuItem>
-    )
-}
-
 
 
 export function WorldStatsNav() {
@@ -65,12 +46,6 @@ export function WorldStatsNav() {
                                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>Countries</NavigationMenuLink>
                                 </Link>
                             </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <Link href="/login" legacyBehavior passHref>
-                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>Admin Login</NavigationMenuLink>
-                                </Link>
-                            </NavigationMenuItem>
-                            <LoginItem />
                         </NavigationMenuList>
                     </NavigationMenu>
                 </nav>
