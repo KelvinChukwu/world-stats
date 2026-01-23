@@ -7,7 +7,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-flask = "^3.0.3"
+flask = "^3.1.1"
 flask-smorest = "^0.44.0"
 flask-mysqldb = "^2.0.0"
 poetry-dotenv-plugin = "^0.2.0"
@@ -19,6 +19,7 @@ psycopg2 = "^2.9.10"
 graphene = ">=3.1"
 graphene-sqlalchemy = {version = "^3.0.0rc2", allow-prereleases = true}
 graphql-server = {extras = ["flask"], version = "^3.0.0b7"}
+flask-login = "^0.6.3"
 
 
 [build-system]

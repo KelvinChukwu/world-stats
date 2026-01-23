@@ -24,7 +24,7 @@ import {
 import { XPagination } from "./page"
 
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
@@ -52,13 +52,39 @@ export function DataTable<TData extends { id: string }, TValue>({
     })
 
     const curSearchParams = useSearchParams()
-    const nameFilter = { id: 'name', value:'' }
+    const nameFilter = { id: 'name', value: '' }
+    const continentFilter = { id: 'continent', value: '' }
+    const populationFilter = { id: 'population', value: ['', ''] }
+    const surfaceAreaFilter = { id: 'surfaceArea', value: ['', ''] }
+    const lifeExpectancyFilter = { id: 'lifeExpectancy', value: ['', ''] }
+
     if (curSearchParams.get('name_contains')) {
         nameFilter.value = curSearchParams.get('name_contains') ?? ''
     }
+    if (curSearchParams.get('population_min')) {
+        populationFilter.value[0] = curSearchParams.get('population_min') ?? ''
+    }
+    if (curSearchParams.get('population_max')) {
+        populationFilter.value[1] = curSearchParams.get('population_max') ?? ''
+    }
+    if (curSearchParams.get('surface_area_min')) {
+        surfaceAreaFilter.value[0] = curSearchParams.get('surface_area_min') ?? ''
+    }
+    if (curSearchParams.get('surface_area_max')) {
+        surfaceAreaFilter.value[1] = curSearchParams.get('surface_area_max') ?? ''
+    }
+    if (curSearchParams.get('life_expectancy_min')) {
+        lifeExpectancyFilter.value[0] = curSearchParams.get('life_expectancy_min') ?? ''
+    }
+    if (curSearchParams.get('life_expectancy_max')) {
+        lifeExpectancyFilter.value[1] = curSearchParams.get('life_expectancy_max') ?? ''
+    }
+    if (curSearchParams.get('continent')) {
+        continentFilter.value = curSearchParams.get('continent') ?? ''
+    }
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        [nameFilter]
+        [nameFilter, continentFilter, populationFilter, surfaceAreaFilter, lifeExpectancyFilter]
     )
 
     const table = useReactTable({
@@ -99,7 +125,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                                                 )}
                                             {header.column.getCanFilter() ? (
                                                 <div>
-                                                    <Filter column={header.column} resetPageIndex={() => {table.resetPageIndex()}} />
+                                                    <Filter column={header.column} resetPageIndex={() => { table.resetPageIndex() }} />
                                                 </div>
                                             ) : null}
                                         </TableHead>
@@ -166,7 +192,7 @@ export function DataTable<TData extends { id: string }, TValue>({
     )
 }
 
-function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, resetPageIndex: () => void }) {
+function Filter({ column, resetPageIndex }: { column: Column<any, unknown>, resetPageIndex: () => void }) {
     const columnFilterValue = column.getFilterValue()
     const { filterVariant } = column.columnDef.meta ?? {}
 
@@ -174,24 +200,76 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
     const router = useRouter()
     const searchParams = useSearchParams()
 
+    // Get a new searchParams string by merging the current
+    // searchParams with a provided key/value pair
+    const createSearchParams = useCallback(
+        (name: string, value: string) => {
+            const params = new URLSearchParams(searchParams.toString())
+            params.set(name, value)
+
+            return params
+        },
+        [searchParams]
+    )
+
     return filterVariant === 'range' ? (
         <div>
             <div className="flex space-x-2">
                 {/* See faceted column filters example for min max values functionality */}
                 <DebouncedInput
                     type="number"
-                    value={(columnFilterValue as [number, number])?.[0] ?? ''}
-                    onChange={value =>
-                        column.setFilterValue((old: [number, number]) => [value, old?.[1]])
+                    min={0}
+                    value={(columnFilterValue as [number | string, number | string])?.[0] ?? ''}
+                    onChange={value => {
+                        column.setFilterValue((old: [number | string, number | string]) => [value, old?.[1]])
+                        let filterName = ""
+                        if (column.id === 'population') {
+                            filterName = 'population_min'
+                        } else if (column.id === 'surfaceArea') {
+                            filterName = 'surface_area_min'
+                        }
+                        else {
+                            filterName = "life_expectancy_min"
+                        }
+
+                        const newSearchParams = createSearchParams(filterName, value.toString())
+                        if (value === '') {
+                            newSearchParams.delete(filterName)
+                        }
+                        // TODO: fix behaviour that resets the page index on back navigation
+                        resetPageIndex()
+                        newSearchParams.delete('page')
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
+                    }
                     }
                     placeholder={`Min`}
                     className="w-24 border shadow rounded"
                 />
                 <DebouncedInput
                     type="number"
+                    min={0}
                     value={(columnFilterValue as [number, number])?.[1] ?? ''}
-                    onChange={value =>
+                    onChange={value => {
                         column.setFilterValue((old: [number, number]) => [old?.[0], value])
+                        let filterName = ""
+                        if (column.id === 'population') {
+                            filterName = 'population_max'
+                        } else if (column.id === 'surfaceArea') {
+                            filterName = 'surface_area_max'
+                        }
+                        else {
+                            filterName = "life_expectancy_max"
+                        }
+
+                        const newSearchParams = createSearchParams(filterName, value.toString())
+                        if (value === '') {
+                            newSearchParams.delete(filterName)
+                        }
+                        // TODO: fix behaviour that resets the page index on back navigation
+                        resetPageIndex()
+                        newSearchParams.delete('page')
+                        router.push(`${pathName}?${newSearchParams.toString()}`)
+                    }
                     }
                     placeholder={`Max`}
                     className="w-24 border shadow rounded"
@@ -203,32 +281,46 @@ function Filter({ column, resetPageIndex}: { column: Column<any, unknown>, reset
         <select
             onChange={e => {
                 column.setFilterValue(e.target.value)
+                const newSearchParams = createSearchParams("continent", e.target.value.toString())
+                console.log(e.target.value)
+                if (e.target.value === '') {
+                    newSearchParams.delete('continent')
+                }
+                // TODO: fix behaviour that resets the page index on back navigation
+                resetPageIndex()
+                newSearchParams.delete('page')
+                router.push(`${pathName}?${newSearchParams.toString()}`)
+
             }
             }
             value={columnFilterValue?.toString()}
         >
             {/* See faceted column filters example for dynamic select options */}
             <option value="">All</option>
-            <option value="complicated">complicated</option>
-            <option value="relationship">relationship</option>
-            <option value="single">single</option>
+            <option value="ASIA">Asia</option>
+            <option value="EUROPE">Europe</option>
+            <option value="NORTH_AMERICA">North America</option>
+            <option value="SOUTH_AMERICA">South America</option>
+            <option value="OCEANIA">Oceania</option>
+            <option value="AFRICA">Africa</option>
+            <option value="ANTARCTICA">Antarctica</option>
         </select>
     ) : (
         <DebouncedInput
             className="w-36 border shadow rounded"
             onChange={value => {
                 column.setFilterValue(value)
-                const newSearchParams = new URLSearchParams()
+                const newSearchParams = createSearchParams("name_contains", value.toString())
                 if (value === '') {
                     newSearchParams.delete('name_contains')
-                } else {
-                    newSearchParams.set('name_contains', value.toString())
                 }
+                // TODO: fix behaviour that resets the page index on back navigation
                 resetPageIndex()
+                newSearchParams.delete('page')
                 router.push(`${pathName}?${newSearchParams.toString()}`)
             }
             }
-            placeholder={`Search...`}
+            placeholder={`Name Contains...`}
             type="text"
             value={(columnFilterValue ?? '') as string}
         />

@@ -2,14 +2,12 @@
 
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,7 +27,7 @@ export function WorldStatsUpdateCountryDialogContent() {
       <DialogHeader>
         <DialogTitle>Edit Country</DialogTitle>
         <DialogDescription>
-          Make changes to a country's attributes here. Click "Save changes" to submit.
+          {`Make changes to a country's attributes here. Click "Save changes" to submit.`}
         </DialogDescription>
       </DialogHeader>
       <form action={updateCountryWithCountryCode}>
