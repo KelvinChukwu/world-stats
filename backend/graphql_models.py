@@ -94,24 +94,48 @@ class CountryLanguage(SQLAlchemyObjectType):
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     countries = SQLAlchemyConnectionField(Country.connection)
+    country_by_code = graphene.Field(Country, code=graphene.String(required=True),name="country")
     # cities  = graphene.List(City)
+
+    def resolve_country_by_code(parent, info, code):
+        query = Country.get_query(info)
+        return query.get(code)
 
     def resolve_countries(parent, info, **kwargs):
         query = Country.get_query(info)
         if kwargs.get("filter"):
             filter = kwargs.get("filter")
-            print(filter)
             if "name" in filter:
                 name_filter = filter["name"]
-                print(name_filter)
-                if "eq" in name_filter:
-                    print (name_filter["eq"])
-                    query = query.where(CountryModel.name == name_filter["eq"])
-
-
+                if "ilike" in name_filter:
+                    query = query.where(CountryModel.name.ilike(name_filter["ilike"]))
+            # TODO: enum filtering
+            if "continent" in filter: # TODO: See if we can filter multiple continents at a time
+                continent_filter = filter["continent"]
+                if "eq" in continent_filter:
+                    query = query.where(CountryModel.continent == continent_filter["eq"])
+            if "population" in filter:
+                population_filter = filter["population"]
+                if "gte" in population_filter:
+                    query = query.where(CountryModel.population >= population_filter["gte"])
+                if "lte" in population_filter:
+                    query = query.where(CountryModel.population <= population_filter["lte"])
+            if "lifeExpectancy" in filter:
+                life_expectancy_filter = filter["lifeExpectancy"]
+                if "gte" in life_expectancy_filter:
+                    query = query.where(CountryModel.life_expectancy >= life_expectancy_filter["gte"])
+                if "lte" in life_expectancy_filter:
+                    query = query.where(CountryModel.life_expectancy <= life_expectancy_filter["lte"])
+            if "surfaceArea" in filter:
+                surface_area_filter = filter["surfaceArea"]
+                if "gte" in surface_area_filter:
+                    query = query.where(CountryModel.surface_area >= surface_area_filter["gte"])
+                if "lte" in surface_area_filter:
+                    query = query.where(CountryModel.surface_area <= surface_area_filter["lte"])
         return query.all()
+    
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, types=[Country, City, CountryLanguage])
 
 
 
