@@ -120,14 +120,14 @@ class Query(graphene.ObjectType):
                     query = query.where(CountryModel.population >= population_filter["gte"])
                 if "lte" in population_filter:
                     query = query.where(CountryModel.population <= population_filter["lte"])
-            if "lifeExpectancy" in filter:
-                life_expectancy_filter = filter["lifeExpectancy"]
+            if "life_expectancy" in filter:
+                life_expectancy_filter = filter["life_expectancy"]
                 if "gte" in life_expectancy_filter:
                     query = query.where(CountryModel.life_expectancy >= life_expectancy_filter["gte"])
                 if "lte" in life_expectancy_filter:
                     query = query.where(CountryModel.life_expectancy <= life_expectancy_filter["lte"])
-            if "surfaceArea" in filter:
-                surface_area_filter = filter["surfaceArea"]
+            if "surface_area" in filter:
+                surface_area_filter = filter["surface_area"]
                 if "gte" in surface_area_filter:
                     query = query.where(CountryModel.surface_area >= surface_area_filter["gte"])
                 if "lte" in surface_area_filter:
