@@ -62,10 +62,23 @@ class CountryLanguageModel (db.Model):
     is_official: Mapped[IsOfficialLanguage] = mapped_column(Enum('T','F', name="country_language_is_official"))
     percentage: Mapped[float]
 
+class CountableConnection(graphene.relay.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+
+    @staticmethod
+    def resolve_total_count(root, info):
+        return root.length
+
+graphene.relay.Connection = CountableConnection
+
 class Country(SQLAlchemyObjectType):
     class Meta:
         model = CountryModel
         interfaces = (graphene.relay.Node,)
+        connection_class = CountableConnection
         # use `only_fields` to only expose specific fields ie "name"
         # only_fields = ("name",)
         # use `exclude_fields` to exclude specific fields ie "last_name"
