@@ -143,8 +143,8 @@ class CountriesByCode(MethodView):
         else:
             abort(404, message="Country not found")
 
-    @cities_blp.arguments(CountryUpdateArgsSchema)
-    @cities_blp.response(200, country_schema)
+    @countries_blp.arguments(CountryUpdateArgsSchema)
+    @countries_blp.response(200, country_schema)
     def patch(self, update_data, country_code):
         """Update existing country"""
         country = db.session.execute(
