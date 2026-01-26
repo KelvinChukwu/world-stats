@@ -62,7 +62,6 @@ class CountryLanguageModel (db.Model):
     is_official: Mapped[IsOfficialLanguage] = mapped_column(Enum('T','F', name="country_language_is_official"))
     percentage: Mapped[float]
 
-
 class Country(SQLAlchemyObjectType):
     class Meta:
         model = CountryModel
